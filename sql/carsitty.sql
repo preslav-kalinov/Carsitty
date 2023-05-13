@@ -58,7 +58,7 @@ CREATE TABLE `users` (
 ALTER TABLE `cars`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `brand` (`brand`),
-  ADD KEY `cars_ibfk_1` (`modelId`);
+  ADD KEY `modelId` (`modelId`);
 
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
@@ -84,7 +84,7 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`) USING HASH,
-  ADD KEY `users_ibfk_1` (`roleId`);
+  ADD KEY `roleId` (`roleId`);
 
 ALTER TABLE `cars`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
