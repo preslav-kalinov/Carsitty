@@ -14,7 +14,7 @@ public class Car implements Serializable {
     @Column(name = "brand")
     private String brand;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "modelId")
     private Model model;
 

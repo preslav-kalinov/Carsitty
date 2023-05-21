@@ -25,7 +25,7 @@ public class User implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "roleId")
-    private Role role;
+    private Role roleId;
 
     @Column(name = "enabled")
     private boolean enabled;
@@ -74,11 +74,11 @@ public class User implements Serializable {
     }
 
     public Role getRole() {
-        return role;
+        return roleId;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRole(Role roleId) {
+        this.roleId = roleId;
     }
 
     public boolean isEnabled() {
