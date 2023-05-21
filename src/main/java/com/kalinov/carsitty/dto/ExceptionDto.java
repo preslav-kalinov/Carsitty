@@ -1,27 +1,32 @@
 package com.kalinov.carsitty.dto;
 
-public class ExceptionDto {
-    private int errorCode;
-    private String errorMessage;
+import java.util.HashMap;
 
-    public ExceptionDto(int errorCode, String errorMessage){
-        this.errorCode = errorCode;
+public class ExceptionDto {
+    private String error;
+    private HashMap<String, String> errorMessage;
+
+    private ExceptionDto(){
+    }
+
+    public ExceptionDto(String error, HashMap<String, String> errorMessage){
+        this.error = error;
         this.errorMessage = errorMessage;
     }
 
-    public int getErrorCode() {
-        return errorCode;
+    public String getError() {
+        return error;
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
+    public void setError(String error) {
+        this.error = error;
     }
 
-    public String getErrorMessage() {
+    public HashMap<String, String> getErrorMessage() {
         return errorMessage;
     }
 
-    public void setErrorMessage(String errorMessage) {
+    public void setErrorMessage(HashMap<String, String> errorMessage) {
         this.errorMessage = errorMessage;
     }
 }

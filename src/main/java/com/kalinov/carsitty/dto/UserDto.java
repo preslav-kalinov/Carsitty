@@ -29,13 +29,6 @@ public class UserDto {
     @NotNull(message = "The enabled field is required to be set to true or false")
     private Boolean enabled;
 
-    public UserDto(String username, String displayName, String password, RoleEnum role) {
-        this.username = username;
-        this.displayName = displayName;
-        this.password = password;
-        this.role = role;
-    }
-
     public UserDto() {
     }
 
@@ -77,5 +70,13 @@ public class UserDto {
 
     public void setRole(RoleEnum role) {
         this.role = role;
+    }
+
+    public Boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

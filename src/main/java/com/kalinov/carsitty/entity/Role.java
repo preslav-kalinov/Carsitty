@@ -3,6 +3,7 @@ package com.kalinov.carsitty.entity;
 import com.kalinov.carsitty.RoleEnum;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -13,9 +14,10 @@ public class Role implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "role", columnDefinition = "enum('ROLE')")
+    @NotNull
     @Enumerated(EnumType.STRING)
-    private RoleEnum roleEnum;
+    @Column(name = "role", columnDefinition = "enum('ROLE')")
+    private RoleEnum role;
 
     public Role() {
     }
@@ -29,10 +31,10 @@ public class Role implements Serializable {
     }
 
     public RoleEnum getRole() {
-        return roleEnum;
+        return role;
     }
 
-    public void setRole(RoleEnum roleEnum) {
-        this.roleEnum = roleEnum;
+    public void setRole(RoleEnum role) {
+        this.role = role;
     }
 }
