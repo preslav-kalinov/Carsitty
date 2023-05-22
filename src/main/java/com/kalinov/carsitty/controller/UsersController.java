@@ -1,6 +1,7 @@
 package com.kalinov.carsitty.controller;
 
 import com.kalinov.carsitty.RoleEnum;
+import com.kalinov.carsitty.dto.UpdatedUserDto;
 import com.kalinov.carsitty.dto.UserDto;
 import com.kalinov.carsitty.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,24 @@ public class UsersController {
     public ResponseEntity<Void> createAdministrator(@Valid @RequestBody UserDto userDto) throws MethodArgumentNotValidException, NoSuchMethodException {
         this.userService.createUser(userDto, RoleEnum.Administrator);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @RequestMapping(value = "/employees/{username}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PATCH)
+    public ResponseEntity<Void> updateEmployee(@PathVariable String username, @Valid @RequestBody UpdatedUserDto updatedUserDto) throws NoSuchMethodException, MethodArgumentNotValidException {
+        this.userService.updateUser(username, RoleEnum.Employee, updatedUserDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @RequestMapping(value = "/managers/{username}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PATCH)
+    public ResponseEntity<Void> updateManager(@PathVariable String username, @Valid @RequestBody UpdatedUserDto updatedUserDto) throws NoSuchMethodException, MethodArgumentNotValidException {
+        this.userService.updateUser(username, RoleEnum.Manager, updatedUserDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @RequestMapping(value = "/administrators/{username}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PATCH)
+    public ResponseEntity<Void> updateAdministrator(@PathVariable String username, @Valid @RequestBody UpdatedUserDto updatedUserDto) throws NoSuchMethodException, MethodArgumentNotValidException {
+        this.userService.updateUser(username, RoleEnum.Administrator, updatedUserDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @RequestMapping(value = "/employees/{username}", method = RequestMethod.DELETE)
