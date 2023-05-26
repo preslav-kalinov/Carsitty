@@ -45,6 +45,15 @@ CREATE TABLE `roles` (
   `role` enum('Employee','Manager','Administrator','') NOT NULL DEFAULT 'Employee' COMMENT '1 - Employee(default),\r\n2 - Manager,\r\n3 - Administrator'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `sales` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `partId` bigint(20) NOT NULL,
+  `soldQuantity` bigint(20) UNSIGNED NOT NULL,
+  `saleProfit` decimal(10,2) UNSIGNED NOT NULL DEFAULT 0.00,
+  `userId` bigint(20) NOT NULL,
+  `saleDate` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `users` (
   `id` bigint(20) NOT NULL,
   `username` varchar(128) NOT NULL,
@@ -58,7 +67,7 @@ CREATE TABLE `users` (
 ALTER TABLE `cars`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `brand` (`brand`),
-  ADD KEY `modelId` (`modelId`);
+  ADD KEY `modelId` (`modelId`) USING BTREE;
 
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
@@ -80,11 +89,16 @@ ALTER TABLE `parts`
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `sales`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `partId` (`partId`) USING BTREE,
+  ADD KEY `userId` (`userId`) USING BTREE;
+
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`) USING HASH,
-  ADD KEY `roleId` (`roleId`);
+  ADD KEY `roleId` (`roleId`) USING BTREE;
 
 ALTER TABLE `cars`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
@@ -104,6 +118,9 @@ ALTER TABLE `parts`
 ALTER TABLE `roles`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `sales`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `users`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
@@ -114,6 +131,10 @@ ALTER TABLE `parts`
   ADD CONSTRAINT `parts_ibfk_1` FOREIGN KEY (`carId`) REFERENCES `cars` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `parts_ibfk_2` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `parts_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `sales`
+  ADD CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`partId`) REFERENCES `parts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `sales_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`roleId`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
