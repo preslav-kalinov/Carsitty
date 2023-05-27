@@ -4,17 +4,17 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "models")
-public class Model implements Serializable {
+@Table(name = "car_brands")
+public class CarBrand implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "model")
-    private String model;
+    @Column(name = "brand")
+    private String brand;
 
-    public Model() {
+    public CarBrand() {
     }
 
     public Long getId() {
@@ -25,11 +25,11 @@ public class Model implements Serializable {
         this.id = id;
     }
 
-    public String getModel() {
-        return model;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setModel(String model) {
-        this.model = model;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 }

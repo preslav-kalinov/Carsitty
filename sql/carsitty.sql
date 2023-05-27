@@ -10,8 +10,13 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `cars` (
   `id` bigint(20) NOT NULL,
-  `brand` varchar(128) NOT NULL,
-  `modelId` bigint(20) NOT NULL
+  `model` varchar(1024) NOT NULL,
+  `carBrandId` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `car_brands` (
+  `id` bigint(20) NOT NULL,
+  `brand` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `categories` (
@@ -23,11 +28,6 @@ CREATE TABLE `logs` (
   `id` bigint(20) NOT NULL,
   `incidentTime` datetime NOT NULL DEFAULT current_timestamp(),
   `errorMessage` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE `models` (
-  `id` bigint(20) NOT NULL,
-  `model` varchar(1024) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `parts` (
@@ -66,8 +66,12 @@ CREATE TABLE `users` (
 
 ALTER TABLE `cars`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `brand` (`brand`),
-  ADD KEY `modelId` (`modelId`) USING BTREE;
+  ADD UNIQUE KEY `model` (`model`) USING HASH,
+  ADD KEY `carBrandId` (`carBrandId`) USING BTREE;
+
+ALTER TABLE `car_brands`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `brand` (`brand`);
 
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
@@ -75,10 +79,6 @@ ALTER TABLE `categories`
 
 ALTER TABLE `logs`
   ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `models`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `model` (`model`) USING HASH;
 
 ALTER TABLE `parts`
   ADD PRIMARY KEY (`id`),
@@ -103,13 +103,13 @@ ALTER TABLE `users`
 ALTER TABLE `cars`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `car_brands`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `categories`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `logs`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `models`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `parts`
@@ -125,7 +125,7 @@ ALTER TABLE `users`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `cars`
-  ADD CONSTRAINT `cars_ibfk_1` FOREIGN KEY (`modelId`) REFERENCES `models` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `cars_ibfk_1` FOREIGN KEY (`carBrandId`) REFERENCES `car_brands` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `parts`
   ADD CONSTRAINT `parts_ibfk_1` FOREIGN KEY (`carId`) REFERENCES `cars` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,

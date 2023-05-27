@@ -11,12 +11,12 @@ public class Car implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "brand")
-    private String brand;
+    @Column(name = "model")
+    private String model;
 
     @ManyToOne
-    @JoinColumn(name = "modelId")
-    private Model model;
+    @JoinColumn(name = "carBrandId")
+    private CarBrand carBrand;
 
     public Car() {
     }
@@ -29,19 +29,19 @@ public class Car implements Serializable {
         this.id = id;
     }
 
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public Model getModel() {
+    public String getModel() {
         return model;
     }
 
-    public void setModel(Model model) {
+    public void setModel(String model) {
         this.model = model;
+    }
+
+    public CarBrand getCarBrand() {
+        return carBrand;
+    }
+
+    public void setCarBrand(CarBrand carBrand) {
+        this.carBrand = carBrand;
     }
 }
