@@ -14,6 +14,7 @@ public class Part implements Serializable {
 
     @Column(name = "name")
     private String name;
+    public static final String nameFormat = "^.{1,1024}$";
 
     @Column(name = "quantity")
     private Long quantity;
