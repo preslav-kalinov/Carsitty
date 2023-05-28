@@ -56,4 +56,23 @@ public class PartsController {
         User user = userDao.getUsersByUsername(authentication.getName()).get(0);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.partService.createPart(partDto, user));
     }
+
+    @RequestMapping(value = "/{partId}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
+    public ResponseEntity editPart(@Valid @RequestBody PartDto partDto, @PathVariable Long partId, Authentication authentication) {
+        User user = userDao.getUsersByUsername(authentication.getName()).get(0);
+        this.partService.updatePart(partId, partDto, user);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @RequestMapping(value = "/{partId}", method = RequestMethod.DELETE)
+    public ResponseEntity deletePart(@PathVariable Long partId) {
+        partService.deletePart(partId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @RequestMapping(value = "/{partId}/sale", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    public ResponseEntity sellPart(@RequestBody SaleDto saleDto, @PathVariable Long partId, Authentication authentication) {
+        User user = userDao.getUsersByUsername(authentication.getName()).get(0);
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.partService.sellPart(saleDto, partId, user));
+    }
 }
