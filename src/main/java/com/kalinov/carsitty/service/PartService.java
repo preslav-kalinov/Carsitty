@@ -1,6 +1,7 @@
 package com.kalinov.carsitty.service;
 
 import com.kalinov.carsitty.dao.*;
+import com.kalinov.carsitty.dto.NewPartDto;
 import com.kalinov.carsitty.dto.PartDto;
 import com.kalinov.carsitty.dto.SaleDto;
 import com.kalinov.carsitty.entity.*;
@@ -15,8 +16,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class PartService {
@@ -47,19 +46,22 @@ public class PartService {
     //operation to get all parts
     public List<Part> getAllParts()  {
         if (this.partDao.count() == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No parts found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There are no available parts");
         }
 
         return this.partDao.findAll();
     }
 
     //operation to add new part
-    public Part createPart(PartDto partDto, User user) {
-        this.validatePartData(partDto);
-        Category category = this.categoryDao.findById(partDto.getCategoryId()).get();
-        Car car = this.carDao.findById(partDto.getCarId()).get();
+    public Part createPart(NewPartDto newPartDto, User user) {
+        this.validatePartData(newPartDto);
+        Category category = this.categoryDao.findById(newPartDto.getCategoryId()).get();
+        Car car = this.carDao.findById(newPartDto.getCarId()).get();
 
-        Part part = modelMapper.map(partDto, Part.class);
+        Part part = new Part();
+        part.setName(newPartDto.getName());
+        part.setQuantity(newPartDto.getQuantity());
+        part.setPrice(newPartDto.getPrice());
         part.setCategory(category);
         part.setCar(car);
         part.setUser(user);
@@ -67,122 +69,17 @@ public class PartService {
         return this.partDao.save(part);
     }
 
-    //checks for the id
-    private void validatePartId(Long id) {
-        Log log = new Log();
-        if (this.partDao.count() == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No parts found");
-        }
-
-        if (id == null) {
-            log.setErrorMessage("ID cannot be empty");
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be empty");
-        }
-
-        if (!this.partDao.existsById(id)) {
-            log.setErrorMessage("This id does not exist: provided " + id);
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Part with ID '%d' not found", id));
-        }
-    }
-
-    private void validatePartData(PartDto partDto) {
-        Log log = new Log();
-        //--------checks if the data is null---------
-        if (partDto.getName() == null) {
-            log.setErrorMessage("Name cannot be empty");
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name cannot be empty");
-        }
-
-        if (partDto.getCarId() == null) {
-            log.setErrorMessage("Car cannot be empty");
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You need to choose a car");
-        }
-
-        if (partDto.getCategoryId() == null) {
-            log.setErrorMessage("Category cannot be empty");
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You need to choose part category");
-        }
-
-        if (partDto.getQuantity() == null) {
-            log.setErrorMessage("Quantity cannot be empty");
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quantity cannot be empty");
-        }
-
-        if (partDto.getPrice() == null) {
-            log.setErrorMessage("Price cannot be empty");
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Price cannot be empty");
-        }
-        //---------------------------------------------
-
-        Matcher partNameMatcher = Pattern.compile(Part.nameFormat).matcher(partDto.getName());
-
-        //check for invalid part name
-        if (!partNameMatcher.matches()) {
-            log.setErrorMessage("Invalid part name");
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Part name must be between 1 and 1024 characters");
-        }
-
-        //check for cars existence
-        if (this.carDao.count() == 0) {
-            log.setErrorMessage("No cars found");
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No cars found");
-        }
-
-        //check for particular car existence
-        if (!this.carDao.existsById(partDto.getCarId())) {
-            log.setErrorMessage("This car does not exist: provided " + partDto.getCarId());
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This car does not exist");
-        }
-
-        //check for category existence
-        if (categoryDao.count() == 0) {
-            log.setErrorMessage("No categories found");
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No categories found");
-        }
-
-        //check for particular category existence
-        if (!this.categoryDao.existsById(partDto.getCategoryId())) {
-            log.setErrorMessage("This category does not exist: provided " + partDto.getCategoryId());
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This category does not exist");
-        }
-
-        //check if quantity is a positive number
-        if (partDto.getQuantity() <= 0) {
-            log.setErrorMessage("Quantity must be a positive number: provided " + partDto.getQuantity());
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quantity must be a positive number");
-        }
-
-        if (partDto.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            log.setErrorMessage("Price must be a positive number: provided " + partDto.getPrice());
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Price must be a positive number");
-        }
-    }
-
     //operation to edit existing part
-    public void updatePart(Long id, PartDto partDto, User user) {
+    public void updatePart(Long id, NewPartDto newPartDto, User user) {
         this.validatePartId(id);
-        this.validatePartData(partDto);
-        Category category = categoryDao.findById(partDto.getCategoryId()).get();
-        Car car = carDao.findById(partDto.getCarId()).get();
+        this.validatePartData(newPartDto);
+        Category category = categoryDao.findById(newPartDto.getCategoryId()).get();
+        Car car = carDao.findById(newPartDto.getCarId()).get();
 
         Part part = partDao.getReferenceById(id);
-        part.setName(partDto.getName());
-        part.setQuantity(partDto.getQuantity());
-        part.setPrice(partDto.getPrice());
+        part.setName(newPartDto.getName());
+        part.setQuantity(newPartDto.getQuantity());
+        part.setPrice(newPartDto.getPrice());
         part.setCategory(category);
         part.setCar(car);
         part.setUser(user);
@@ -219,15 +116,48 @@ public class PartService {
         return part;
     }
 
+    //checks for the id
+    private void validatePartId(Long id) {
+        Log log = new Log();
+        if (this.partDao.count() == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Parts not found");
+        }
+
+        if (id == null) {
+            log.setErrorMessage("ID cannot be empty");
+            this.logDao.save(log);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be empty");
+        }
+
+        if (!this.partDao.existsById(id)) {
+            log.setErrorMessage("This id does not exist: provided " + id);
+            this.logDao.save(log);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Part with ID '%d' not found", id));
+        }
+    }
+
+    private void validatePartData(NewPartDto newPartDto) {
+        Log log = new Log();
+        //check for particular car existence
+        if (!this.carDao.existsById(newPartDto.getCarId())) {
+            log.setErrorMessage("This car does not exist: provided " + newPartDto.getCarId());
+            //this.logDao.save(log);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("The car with ID '%d' does not exist", newPartDto.getCarId()));
+        }
+
+        //check for particular category existence
+        if (!this.categoryDao.existsById(newPartDto.getCategoryId())) {
+            log.setErrorMessage("This category does not exist: provided " + newPartDto.getCategoryId());
+            //this.logDao.save(log);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("The category with ID '%d' does not exist", newPartDto.getCategoryId()));
+        }
+    }
+
     //availability check
     private void validatePartSale(SaleDto saleDto, Part part) {
         Long partQuantity = part.getQuantity();
         Log log = new Log();
-        if (saleDto.getSoldQuantity() == null) {
-            log.setErrorMessage("Sold quantity cannot be empty");
-            this.logDao.save(log);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sold quantity cannot be empty");
-        }
+
         if (saleDto.getSoldQuantity() <= 0 || saleDto.getSoldQuantity() > partQuantity) {
             log.setErrorMessage("You can sell between 1 and " + partQuantity + " of this product");
             this.logDao.save(log);

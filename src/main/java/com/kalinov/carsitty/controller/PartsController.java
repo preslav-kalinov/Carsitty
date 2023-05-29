@@ -1,10 +1,12 @@
 package com.kalinov.carsitty.controller;
 
 import com.kalinov.carsitty.dao.UserDao;
+import com.kalinov.carsitty.dto.NewPartDto;
 import com.kalinov.carsitty.dto.PartDto;
 import com.kalinov.carsitty.dto.SaleDto;
 import com.kalinov.carsitty.entity.Car;
 import com.kalinov.carsitty.entity.Category;
+import com.kalinov.carsitty.entity.Part;
 import com.kalinov.carsitty.entity.User;
 import com.kalinov.carsitty.service.PartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,15 +54,15 @@ public class PartsController {
     }
 
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity createPart(@Valid @RequestBody PartDto partDto, Authentication authentication) {
+    public ResponseEntity<Part> createPart(@Valid @RequestBody NewPartDto newPartDto, Authentication authentication) {
         User user = userDao.getUsersByUsername(authentication.getName()).get(0);
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.partService.createPart(partDto, user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.partService.createPart(newPartDto, user));
     }
 
     @RequestMapping(value = "/{partId}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
-    public ResponseEntity editPart(@Valid @RequestBody PartDto partDto, @PathVariable Long partId, Authentication authentication) {
+    public ResponseEntity editPart(@Valid @RequestBody NewPartDto newPartDto, @PathVariable Long partId, Authentication authentication) {
         User user = userDao.getUsersByUsername(authentication.getName()).get(0);
-        this.partService.updatePart(partId, partDto, user);
+        this.partService.updatePart(partId, newPartDto, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
