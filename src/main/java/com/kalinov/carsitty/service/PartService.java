@@ -1,5 +1,6 @@
 package com.kalinov.carsitty.service;
 
+import com.kalinov.carsitty.RoleEnum;
 import com.kalinov.carsitty.dao.*;
 import com.kalinov.carsitty.dto.NewPartDto;
 import com.kalinov.carsitty.dto.PartDto;
@@ -11,30 +12,36 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.mail.MessagingException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PartService {
     private final PartDao partDao;
     private final CarDao carDao;
+    private final UserDao userDao;
     private final LogService logService;
     private final CategoryDao categoryDao;
     private final SaleDao saleDao;
     private final ModelMapperUtil modelMapper;
+    private final MailService mailService;
 
     @Autowired
-    public PartService(PartDao partDao, CarDao carDao, LogService logService,
-                       CategoryDao categoryDao, SaleDao saleDao, ModelMapperUtil modelMapper) {
+    public PartService(PartDao partDao, CarDao carDao, UserDao userDao, LogService logService,
+                       CategoryDao categoryDao, SaleDao saleDao, ModelMapperUtil modelMapper, MailService mailService) {
         this.partDao = partDao;
         this.carDao = carDao;
+        this.userDao = userDao;
         this.logService = logService;
         this.categoryDao = categoryDao;
         this.saleDao = saleDao;
         this.modelMapper = modelMapper;
+        this.mailService = mailService;
     }
 
     //operation to get a part by id
@@ -100,9 +107,9 @@ public class PartService {
     }
 
     //operation to sell a part
-    public Part sellPart(SaleDto saleDto, Long id, User user) {
-        this.validatePartId(id);
-        Part part = partDao.findById(id).get();
+    public Part sellPart(SaleDto saleDto, Long partId, User user) throws MessagingException {
+        this.validatePartId(partId);
+        Part part = partDao.findById(partId).get();
         this.validatePartSale(saleDto, part);
         Long partQuantity = part.getQuantity();
         partQuantity -= saleDto.getSoldQuantity();
@@ -118,6 +125,15 @@ public class PartService {
         sale.setUser(user);
         sale.setSaleDate(Date.valueOf(LocalDate.now(ZoneOffset.UTC)));
         this.saleDao.save(sale);
+
+        List<User> managers = userDao.getUsersByRole(RoleEnum.Manager);
+        List<String> managerEmails = managers.stream()
+                .map(User::getEmail)
+                .collect(Collectors.toList());
+
+        String mailSubject = "New sale for part " + part.getName();
+        String emailBody = "Dear Carsitty Managers,\n\nThere has been a successful sale of part ID " + partId + ", with name '" + part.getName() + "' and there are " + part.getQuantity() + " items left of it.\n\nThis is an automated message by Carsitty Part Manager.";
+        this.mailService.sendEmail(managerEmails, mailSubject, emailBody);
 
         return part;
     }

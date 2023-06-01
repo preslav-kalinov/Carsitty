@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class PartsController {
     }
 
     @RequestMapping(value = "/{partId}/sale", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity sellPart(@RequestBody SaleDto saleDto, @PathVariable Long partId, Authentication authentication) {
+    public ResponseEntity sellPart(@RequestBody SaleDto saleDto, @PathVariable Long partId, Authentication authentication) throws MessagingException {
         User user = userDao.getUsersByUsername(authentication.getName()).get(0);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.partService.sellPart(saleDto, partId, user));
     }
