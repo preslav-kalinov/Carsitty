@@ -43,17 +43,17 @@ public class CustomBasicAuthenticationEntryPoint extends BasicAuthenticationEntr
 
     private void createAndSendUnauthorizedResponse(HttpServletResponse httpServletResponse) throws IOException {
         if (httpServletResponse.getStatus() == HttpServletResponse.SC_FORBIDDEN) {
-            ExceptionDto exceptionDto = new ExceptionDto(HttpStatus.FORBIDDEN.getReasonPhrase(), getErrorContent(
+            ExceptionDto exceptionDto = new ExceptionDto(HttpStatus.FORBIDDEN.getReasonPhrase(), this.getErrorContent(
                     "Authorization not enough"));
             String responseBody = new ObjectMapper().writeValueAsString(exceptionDto);
-            sendResponse(httpServletResponse, responseBody);
+            this.sendResponse(httpServletResponse, responseBody);
             return;
         }
 
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        ExceptionDto exceptionDto = new ExceptionDto(HttpStatus.UNAUTHORIZED.getReasonPhrase(), getErrorContent(
+        ExceptionDto exceptionDto = new ExceptionDto(HttpStatus.UNAUTHORIZED.getReasonPhrase(), this.getErrorContent(
                 "Wrong username or password"));
         String responseBody = new ObjectMapper().writeValueAsString(exceptionDto);
-        sendResponse(httpServletResponse, responseBody);
+        this.sendResponse(httpServletResponse, responseBody);
     }
 }
