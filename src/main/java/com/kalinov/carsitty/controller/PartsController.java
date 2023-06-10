@@ -1,10 +1,7 @@
 package com.kalinov.carsitty.controller;
 
 import com.kalinov.carsitty.dao.UserDao;
-import com.kalinov.carsitty.dto.LogDto;
-import com.kalinov.carsitty.dto.NewPartDto;
-import com.kalinov.carsitty.dto.PartDto;
-import com.kalinov.carsitty.dto.SaleDto;
+import com.kalinov.carsitty.dto.*;
 import com.kalinov.carsitty.entity.Car;
 import com.kalinov.carsitty.entity.Category;
 import com.kalinov.carsitty.entity.Part;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -42,7 +40,7 @@ public class PartsController {
     }
 
     @RequestMapping(value = "/{partId}", method = RequestMethod.GET)
-    public ResponseEntity<PartDto> getPart(@PathVariable Long partId) {
+    public ResponseEntity<PartDto> getPart(@PathVariable Long partId) throws IOException {
         return ResponseEntity.status(HttpStatus.OK).body(this.partService.getPart(partId));
     }
 
@@ -59,26 +57,27 @@ public class PartsController {
     }
 
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity<Part> createPart(@Valid @RequestBody NewPartDto newPartDto, Authentication authentication) {
+    public ResponseEntity<Part> createPart(@Valid @RequestBody NewPartDto newPartDto, Authentication authentication) throws IOException {
         User user = userDao.getUsersByUsername(authentication.getName()).get(0);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.partService.createPart(newPartDto, user));
     }
 
     @RequestMapping(value = "/{partId}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
-    public ResponseEntity editPart(@Valid @RequestBody NewPartDto newPartDto, @PathVariable Long partId, Authentication authentication) {
+    public ResponseEntity editPart(@Valid @RequestBody NewPartDto newPartDto, @PathVariable Long partId, Authentication authentication) throws IOException {
         User user = userDao.getUsersByUsername(authentication.getName()).get(0);
         this.partService.updatePart(partId, newPartDto, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @RequestMapping(value = "/{partId}", method = RequestMethod.DELETE)
-    public ResponseEntity deletePart(@PathVariable Long partId) {
-        partService.deletePart(partId);
+    public ResponseEntity deletePart(@PathVariable Long partId, Authentication authentication) throws IOException {
+        User user = userDao.getUsersByUsername(authentication.getName()).get(0);
+        partService.deletePart(partId, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @RequestMapping(value = "/{partId}/sale", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity sellPart(@RequestBody SaleDto saleDto, @PathVariable Long partId, Authentication authentication) throws MessagingException {
+    public ResponseEntity sellPart(@Valid @RequestBody SaleDto saleDto, @PathVariable Long partId, Authentication authentication) throws MessagingException, IOException {
         User user = userDao.getUsersByUsername(authentication.getName()).get(0);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.partService.sellPart(saleDto, partId, user));
     }

@@ -40,3 +40,5 @@ mvnw.cmd
 # Carsitty configuration files
 application.properties
 
+# Carsitty log files
+*.log

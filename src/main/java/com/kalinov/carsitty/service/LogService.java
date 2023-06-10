@@ -38,8 +38,8 @@ public class LogService {
         return logDtoList;
     }
 
-    public void logCreatedPart(Long partId, String partName) {
-        String partCreatedMessage = String.format("created part '%s' with ID: %d", partName, partId);
+    public void logCreatedPart(String partName) {
+        String partCreatedMessage = String.format("created part '%s'", partName);
         this.insertLog(partCreatedMessage);
     }
 
@@ -50,6 +50,11 @@ public class LogService {
 
     public void logDeletedPart(Long partId, String partName) {
         String partDeletedMessage = String.format("deleted part '%s' with ID: %d", partName, partId);
+        this.insertLog(partDeletedMessage);
+    }
+
+    public void logSoldPart(Long partId, String partName) {
+        String partDeletedMessage = String.format("sold part '%s' with ID: %d", partName, partId);
         this.insertLog(partDeletedMessage);
     }
 
