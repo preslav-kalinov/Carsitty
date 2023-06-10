@@ -27,13 +27,9 @@ public class CustomBasicAuthenticationEntryPoint extends BasicAuthenticationEntr
         super.afterPropertiesSet();
     }
 
-    private String getUnauthorizedReasonPhrase() {
-        return "Wrong username or password";
-    }
-
-    private HashMap<String, String> getErrorContent() {
+    private HashMap<String, String> getErrorContent(String errorMessage) {
         HashMap<String, String> errorContent = new HashMap<>();
-        errorContent.put("problem", this.getUnauthorizedReasonPhrase());
+        errorContent.put("problem", errorMessage);
         return errorContent;
     }
 
@@ -46,9 +42,18 @@ public class CustomBasicAuthenticationEntryPoint extends BasicAuthenticationEntr
     }
 
     private void createAndSendUnauthorizedResponse(HttpServletResponse httpServletResponse) throws IOException {
+        if (httpServletResponse.getStatus() == HttpServletResponse.SC_FORBIDDEN) {
+            ExceptionDto exceptionDto = new ExceptionDto(HttpStatus.FORBIDDEN.getReasonPhrase(), getErrorContent(
+                    "Authorization not enough"));
+            String responseBody = new ObjectMapper().writeValueAsString(exceptionDto);
+            sendResponse(httpServletResponse, responseBody);
+            return;
+        }
+
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        ExceptionDto exceptionDto = new ExceptionDto(HttpStatus.UNAUTHORIZED.getReasonPhrase(), this.getErrorContent());
+        ExceptionDto exceptionDto = new ExceptionDto(HttpStatus.UNAUTHORIZED.getReasonPhrase(), getErrorContent(
+                "Wrong username or password"));
         String responseBody = new ObjectMapper().writeValueAsString(exceptionDto);
-        this.sendResponse(httpServletResponse, responseBody);
+        sendResponse(httpServletResponse, responseBody);
     }
 }

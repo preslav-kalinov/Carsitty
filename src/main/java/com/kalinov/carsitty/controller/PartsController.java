@@ -7,6 +7,7 @@ import com.kalinov.carsitty.entity.Category;
 import com.kalinov.carsitty.entity.Part;
 import com.kalinov.carsitty.entity.User;
 import com.kalinov.carsitty.service.LogService;
+import com.kalinov.carsitty.service.PartDiscountSharingService;
 import com.kalinov.carsitty.service.PartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,12 +26,15 @@ import java.util.List;
 public class PartsController {
     private final PartService partService;
     private final LogService logService;
+    private final PartDiscountSharingService partDiscountSharingService;
     private final UserDao userDao;
 
     @Autowired
-    public PartsController (PartService partService, LogService logService, UserDao userDao) {
+    public PartsController (PartService partService, LogService logService, UserDao userDao,
+                            PartDiscountSharingService partDiscountSharingService) {
         this.partService = partService;
         this.logService = logService;
+        this.partDiscountSharingService = partDiscountSharingService;
         this.userDao = userDao;
     }
 
@@ -85,5 +89,11 @@ public class PartsController {
     @RequestMapping(value = "/logs", method = RequestMethod.GET)
     public ResponseEntity<List<LogDto>> getPartLogs() {
         return ResponseEntity.status(HttpStatus.OK).body(this.logService.getLogs());
+    }
+
+    @RequestMapping(value = "/{partId}/share", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    public ResponseEntity sharePartDiscount(@Valid @RequestBody DiscountDto discountDto, @PathVariable Long partId) throws IOException {
+        this.partDiscountSharingService.sharePartDiscountToFacebook(partId, discountDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

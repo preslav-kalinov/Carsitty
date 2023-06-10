@@ -58,6 +58,11 @@ public class LogService {
         this.insertLog(partDeletedMessage);
     }
 
+    public void logPartSharedToFacebook(Long partId, String partName) {
+        String partSharedMessage = String.format("shared part discount '%s' with ID: %d to Facebook", partName, partId);
+        this.insertLog(partSharedMessage);
+    }
+
     private void insertLog(String message) {
         Log log = new Log();
         String logMessage = this.getAuthenticatedUserLogMessage(message);
