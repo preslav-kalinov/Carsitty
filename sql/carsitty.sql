@@ -27,7 +27,7 @@ CREATE TABLE `categories` (
 CREATE TABLE `logs` (
   `id` bigint(20) NOT NULL,
   `incidentTime` datetime NOT NULL DEFAULT current_timestamp(),
-  `errorMessage` text NOT NULL
+  `message` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `parts` (

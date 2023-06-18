@@ -16,8 +16,8 @@ public class Log implements Serializable {
     @Column(name = "incidentTime")
     private Timestamp incidentTime;
 
-    @Column(name = "errorMessage", columnDefinition = "TEXT")
-    private String errorMessage;
+    @Column(name = "message", columnDefinition = "TEXT")
+    private String message;
 
     public Log() {
     }
@@ -30,12 +30,12 @@ public class Log implements Serializable {
         this.id = id;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Timestamp getIncidentTime() {

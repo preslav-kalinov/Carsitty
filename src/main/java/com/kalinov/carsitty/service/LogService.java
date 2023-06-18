@@ -66,7 +66,7 @@ public class LogService {
     private void insertLog(String message) {
         Log log = new Log();
         String logMessage = this.getAuthenticatedUserLogMessage(message);
-        log.setErrorMessage(logMessage);
+        log.setMessage(logMessage);
         log.setIncidentTime(Timestamp.valueOf(LocalDateTime.now(ZoneOffset.UTC)));
         this.logDao.save(log);
     }
