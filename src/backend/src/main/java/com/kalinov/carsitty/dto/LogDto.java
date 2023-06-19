@@ -2,7 +2,7 @@ package com.kalinov.carsitty.dto;
 
 public class LogDto {
     private String incidentTime;
-    private String errorMessage;
+    private String message;
 
     public LogDto() {
     }
@@ -15,11 +15,11 @@ public class LogDto {
         this.incidentTime = incidentTime;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
