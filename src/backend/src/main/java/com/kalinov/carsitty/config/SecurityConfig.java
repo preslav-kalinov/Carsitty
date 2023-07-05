@@ -49,13 +49,8 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString())
                 .antMatchers(HttpMethod.GET, "/users/*").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString())
 
-                .antMatchers(HttpMethod.POST, "/users/employees").hasAuthority(RoleEnum.Manager.toString())
-                .antMatchers(HttpMethod.PATCH, "/users/employees/*").hasAuthority(RoleEnum.Manager.toString())
-                .antMatchers(HttpMethod.DELETE, "/users/employees/*").hasAuthority(RoleEnum.Manager.toString())
-
-                .antMatchers(HttpMethod.POST, "/users/managers").hasAuthority(RoleEnum.Administrator.toString())
-                .antMatchers(HttpMethod.PATCH, "/users/managers/*").hasAuthority(RoleEnum.Administrator.toString())
-                .antMatchers(HttpMethod.DELETE, "/users/managers/*").hasAuthority(RoleEnum.Administrator.toString())
+                .antMatchers( "/users").hasAuthority(RoleEnum.Administrator.toString())
+                .antMatchers("/users/*").hasAuthority(RoleEnum.Administrator.toString())
 
                 .antMatchers(HttpMethod.POST, "/backup").hasAuthority(RoleEnum.Administrator.toString())
 

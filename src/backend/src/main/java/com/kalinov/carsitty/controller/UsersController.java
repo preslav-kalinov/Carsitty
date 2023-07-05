@@ -46,12 +46,6 @@ public class UsersController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @RequestMapping(value = "/administrators", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity<Void> createAdministrator(@Valid @RequestBody UserDto userDto) throws MethodArgumentNotValidException, NoSuchMethodException {
-        this.userService.createUser(userDto, RoleEnum.Administrator);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     @RequestMapping(value = "/employees/{username}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PATCH)
     public ResponseEntity<Void> updateEmployee(@PathVariable String username, @Valid @RequestBody UpdatedUserDto updatedUserDto) throws NoSuchMethodException, MethodArgumentNotValidException {
         this.userService.updateUser(username, RoleEnum.Employee, updatedUserDto);
@@ -64,12 +58,6 @@ public class UsersController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @RequestMapping(value = "/administrators/{username}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PATCH)
-    public ResponseEntity<Void> updateAdministrator(@PathVariable String username, @Valid @RequestBody UpdatedUserDto updatedUserDto) throws NoSuchMethodException, MethodArgumentNotValidException {
-        this.userService.updateUser(username, RoleEnum.Administrator, updatedUserDto);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
     @RequestMapping(value = "/employees/{username}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteEmployee(@PathVariable String username) {
         this.userService.deleteUser(username, RoleEnum.Employee);
@@ -79,12 +67,6 @@ public class UsersController {
     @RequestMapping(value = "/managers/{username}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteManager(@PathVariable String username) {
         this.userService.deleteUser(username, RoleEnum.Manager);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @RequestMapping(value = "/administrators/{username}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteAdministrator(@PathVariable String username) {
-        this.userService.deleteUser(username, RoleEnum.Administrator);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
