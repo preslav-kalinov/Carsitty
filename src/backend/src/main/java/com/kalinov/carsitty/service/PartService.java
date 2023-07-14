@@ -100,7 +100,6 @@ public class PartService {
         part.setPrice(newPartDto.getPrice());
         part.setCategory(category);
         part.setCar(car);
-        part.setUser(user);
 
         this.logService.logUpdatedPart(part.getId(), part.getName());
         this.fileService.writeToFile("Part with ID:" + part.getId() + " and name '" + part.getName() +

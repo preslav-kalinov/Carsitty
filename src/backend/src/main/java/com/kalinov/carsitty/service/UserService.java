@@ -1,10 +1,13 @@
 package com.kalinov.carsitty.service;
 
 import com.kalinov.carsitty.RoleEnum;
+import com.kalinov.carsitty.dao.PartDao;
 import com.kalinov.carsitty.dao.RoleDao;
+import com.kalinov.carsitty.dao.SaleDao;
 import com.kalinov.carsitty.dao.UserDao;
 import com.kalinov.carsitty.dto.*;
 import com.kalinov.carsitty.entity.Role;
+import com.kalinov.carsitty.entity.Sale;
 import com.kalinov.carsitty.entity.User;
 import com.kalinov.carsitty.util.ModelMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +29,18 @@ public class UserService {
     private final ModelMapperUtil modelMapper;
     private final UserDao userDao;
     private final RoleDao roleDao;
+    private final PartDao partDao;
+    private final SaleDao saleDao;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(ModelMapperUtil modelMapper, UserDao userDao, RoleDao roleDao, PasswordEncoder passwordEncoder) {
+    public UserService(ModelMapperUtil modelMapper, UserDao userDao, RoleDao roleDao, PasswordEncoder passwordEncoder,
+                       PartDao partDao, SaleDao saleDao) {
         this.modelMapper = modelMapper;
         this.userDao = userDao;
         this.roleDao = roleDao;
+        this.partDao = partDao;
+        this.saleDao = saleDao;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -77,6 +85,12 @@ public class UserService {
     @Transactional
     public void deleteUser(String username, RoleEnum roleEnum) {
         this.checkUserExistenceAndDesiredRole(username, roleEnum);
+        User user = this.userDao.getUserByUsername(username);
+
+        if (!this.partDao.getPartsByUserId(user.getId()).isEmpty() || !this.saleDao.getSalesByUserId(user.getId()).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("The user '%s' could not be deleted. Only deactivation is applicable.", username));
+        }
+
         this.userDao.deleteUserByUsername(username);
     }
 
