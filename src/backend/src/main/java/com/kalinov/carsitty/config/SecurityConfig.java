@@ -61,8 +61,8 @@ public class SecurityConfig {
 
                 .antMatchers(HttpMethod.POST, "/parts/logs").hasAuthority(RoleEnum.Administrator.toString())
 
-                .antMatchers(HttpMethod.POST, "/parts/sale/*").hasAuthority(RoleEnum.Employee.toString())
-                .antMatchers(HttpMethod.POST, "/parts/share/*").hasAuthority(RoleEnum.Employee.toString())
+                .antMatchers(HttpMethod.POST, "/parts/*/sale").hasAuthority(RoleEnum.Employee.toString())
+                .antMatchers(HttpMethod.POST, "/parts/*/share").hasAuthority(RoleEnum.Employee.toString())
 
                 .antMatchers(HttpMethod.POST, "/parts").hasAuthority(RoleEnum.Manager.toString())
                 .antMatchers(HttpMethod.PUT, "/parts/*").hasAuthority(RoleEnum.Manager.toString())

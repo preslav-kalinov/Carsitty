@@ -80,7 +80,7 @@ public class PartsController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @RequestMapping(value = "/sale/{partId}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    @RequestMapping(value = "/{partId}/sale", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
     public ResponseEntity sellPart(@Valid @RequestBody SaleDto saleDto, @PathVariable Long partId, Authentication authentication) throws MessagingException, IOException {
         User user = userDao.getUsersByUsername(authentication.getName()).get(0);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.partService.sellPart(saleDto, partId, user));
@@ -91,7 +91,7 @@ public class PartsController {
         return ResponseEntity.status(HttpStatus.OK).body(this.logService.getLogs());
     }
 
-    @RequestMapping(value = "/share/{partId}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    @RequestMapping(value = "/{partId}/share", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
     public ResponseEntity sharePartDiscount(@Valid @RequestBody DiscountDto discountDto, @PathVariable Long partId) throws IOException {
         this.partDiscountSharingService.sharePartDiscountToFacebook(partId, discountDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
