@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Login | Carsitty</title>
+        <!-- MDB icon -->
+        <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+        <!-- Font Awesome -->
+        <link
+          rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        />
+        <!-- Google Fonts Roboto -->
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+        />
+        <!-- Dark MDB theme -->
+        <link rel="stylesheet" href="css/mdb.dark.min.css" />
+    
+        <!-- Regular MDB theme -->
+        <!-- <link rel="stylesheet" href="css/mdb.min.css" /> -->
+    
+        <!-- Auto Parts Manager CSS -->
+        <link rel="stylesheet" href="css/carsitty.css" />
+        
+        <!-- JQuery -->
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <!--API config-->
+        <script src="js/config.js"></script>
+        <!-- Util -->
+        <script src="js/util.js"></script>
+        <!--Login-->
+        <script src="js/login.js"></script>
+    </head>
+    <body onload="onPageLoaded()">
+        <!-- Start your project here-->
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid d-flex justify-content-center">
+                <div class="navbar-brand">Login</div>
+            </div>
+        </nav>
+
+        <div id="loadingContainer" class="container my-5 d-flex justify-content-center">
+            <div class="spinner-grow text-danger" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <div id="errorMessageContainer" class="container my-5 visually-hidden">
+            <div id="errorMessage" class="alert alert-danger" role="alert">
+                <i class="fas fa-times-circle me-3"></i><span id="errorMessageContent"></span>
+            </div>
+        </div>
+
+        <div id="successMessageContainer" class="container my-5 visually-hidden">
+            <div class="alert alert-success" role="alert">
+                <i class="fas fa-check-circle me-3"></i>Login successfull</span>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row align-items-center" style="height: 70vh;">
+                <div class="mx-auto">
+                    <!-- Username input -->
+                    <div class="form-outline mb-4 col-md-4 offset-md-4">
+                        <input type="username" id="usernameField" class="form-control validate" pattern="^.{3,128}$" required>
+                        <label class="form-label" for="usernameField" data-error="invalid" style="margin-left: 0px;">Username</label>
+                    </div>
+                    
+                    <!-- Password input -->
+                    <div class="form-outline mb-4 col-md-4 offset-md-4">
+                        <input type="password" id="passwordField" class="form-control validate" pattern="^.{6,60}$" required>
+                        <label class="form-label" for="passwordField" data-error="invalid" style="margin-left: 0px;">Password</label>
+                    </div>
+                    
+                    <!-- Submit button -->
+                    <button id="loginBtn" type="submit" onclick="submitLogin()" class="btn btn-primary button-block ripple-surface col-md-4 offset-md-4">Sign in</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-white fixed-bottom">    
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: #0a4275;">
+                <b>Carsitty</b> by Preslav Kalinov.
+            </div>
+            <!-- Copyright -->
+        </footer>
+        <!-- End your project here-->
+
+        <!-- MDB -->
+        <script type="text/javascript" src="js/mdb.min.js"></script>
+        <!-- Custom scripts -->
+        <script type="text/javascript"></script>
+    </body>
+</html>
