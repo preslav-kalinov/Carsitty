@@ -38,12 +38,45 @@
     <!--Product Listing-->
     <script src="js/partsListing.js"></script>
   </head>
+
   <body onload="onPageLoaded()">
     <!-- Start your project here-->
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container-fluid d-flex justify-content-center">
         <div class="navbar-brand">Parts Listing</div>
+      </div>
+
+      <div class="d-flex align-items-center">
+        <ul class="navbar-nav d-flex flex-row">
+          <!-- Icon dropdown -->
+          <li class="nav-item me-3 me-lg-0 dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-mdb-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="fas fa-user"></i>
+              <strong id="loggedUserInfo"></strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li>
+                <a class="dropdown-item" href="#">My profile data</a>
+              </li>
+              <li>
+                <a 
+                  class="dropdown-item" 
+                  href="#"
+                  data-mdb-toggle="modal"
+                  data-mdb-target="#logoutModal"
+                  >Logout</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </nav>
 
@@ -82,6 +115,7 @@
       </table>
     </div>
 
+    <!-- Delete Modal -->
     <div class="modal fade" id="deletePartModal" tabindex="-1" aria-labelledby="deletePartModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -95,6 +129,27 @@
               Yes
             </button>
             <button id="deletePartModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
+              No
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutModalLabel">Confirm logout</h5>
+            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div id="logoutModalBody" class="modal-body">Are you sure you want to logout from Carsitty part management system?</div>
+          <div class="modal-footer">
+            <button id="logoutModalYesButton" type="button" class="btn btn-success" onclick="logoutUser()">
+              Yes
+            </button>
+            <button id="logoutModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
               No
             </button>
           </div>

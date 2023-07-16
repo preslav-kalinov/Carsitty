@@ -5,6 +5,9 @@ $.ajax({
         withCredentials: true
     },
     crossDomain: true,
+    success: function(result) {
+        showLoggedUserInfo(result)
+    },
     error: function(xhr, status, code) {
         window.location.href = "login.html";
     }
@@ -32,17 +35,17 @@ function onPageLoaded() {
             hideElement('#partsListingContainer');
             
             if(xhr.status == 404) {
-                $("#errorMessage").append(JSON.parse(xhr.responseText).errorMessage.problem);
+                $("#errorMessageContent").append(JSON.parse(xhr.responseText).errorMessage.problem);
                 showElement("#addPartContainer");
                 return;
             }
 
             if(xhr.status == 401) {
-                $("#errorMessage").append(JSON.parse(xhr.responseText).errorMessage.problem);
+                $("#errorMessageContent").append(JSON.parse(xhr.responseText).errorMessage.problem);
                 return;
             }
 
-            $("#errorMessage").append("Cannot connect to server");
+            $("#errorMessageContent").append("Cannot connect to server");
         }
     });
 }
@@ -84,10 +87,10 @@ function deletePart(id) {
             hideElement('#addPartContainer');
             hideElement('#partsListingContainer');
             if(xhr.status == 404 || xhr.status == 400 || xhr.status == 401) {
-                $("#errorMessage").append(JSON.parse(xhr.responseText).errorMessage.problem);
+                $("#errorMessageContent").append(JSON.parse(xhr.responseText).errorMessage.problem);
                 return;
             }
-            $("#errorMessage").append("Cannot connect to server");
+            $("#errorMessageContent").append("Cannot connect to server");
         }
     });
 }
