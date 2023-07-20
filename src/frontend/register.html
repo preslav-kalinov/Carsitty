@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Sign up | Carsitty</title>
+        <!-- MDB icon -->
+        <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+        <!-- Font Awesome -->
+        <link
+          rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        />
+        <!-- Google Fonts Roboto -->
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+        />
+        <!-- Dark MDB theme -->
+        <link rel="stylesheet" href="css/mdb.dark.min.css" />
+    
+        <!-- Regular MDB theme -->
+        <!-- <link rel="stylesheet" href="css/mdb.min.css" /> -->
+    
+        <!-- Auto Parts Manager CSS -->
+        <link rel="stylesheet" href="css/carsitty.css" />
+        
+        <!-- JQuery -->
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <!--API config-->
+        <script src="js/config.js"></script>
+        <!-- Util -->
+        <script src="js/util.js"></script>
+        <!--Register-->
+        <script src="js/register.js"></script>
+    </head>
+    <body onload="onPageLoaded()">
+        <!-- Start your project here-->
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid d-flex justify-content-center">
+                <div class="navbar-brand">Sign up</div>
+            </div>
+
+             <div class="d-flex align-items-center">
+                <ul class="navbar-nav d-flex flex-row">
+                  <!-- Icon dropdown -->
+                  <li class="nav-item me-3 me-lg-0 dropdown">
+                    <a
+                      class="nav-link dropdown-toggle"
+                      href="#"
+                      id="navbarDropdown"
+                      role="button"
+                      data-mdb-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i class="fas fa-user"></i>
+                        <!--<strong id="loggedUserInfo"></strong> -->
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" style="background-color: #2673f2;">
+                      <li>
+                        <a class="dropdown-item" href="#">My profile data</a>
+                      </li>
+                      <li>
+                        <a 
+                          class="dropdown-item" 
+                          href="#"
+                          data-mdb-toggle="modal"
+                          data-mdb-target="#logoutModal"
+                          >Logout</a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div id="loadingContainer" class="row mt-5 d-flex justify-content-center">
+                <div class="spinner-grow text-danger" role="status">
+                    <span>Loading...</span>
+                </div>
+            </div>
+
+            <div id="errorMessageContainer" class="row mt-5 visually-hidden">
+                <div id="errorMessage" class="alert alert-danger" role="alert">
+                    <i class="fas fa-times-circle me-3"></i><span id="errorMessageContent"></span>
+                </div>
+            </div>
+    
+            <div id="successMessageContainer" class="row mt-5 visually-hidden">
+                <div class="alert alert-success" role="alert">
+                    <i class="fas fa-check-circle me-3"></i>Sign up successful</span>
+                </div>
+            </div>
+            
+            <div id="returnToAdminMenuContainer" class="container my-5 visually-hidden">
+                <a href="index.html"><button type="button" class="btn btn-primary btn-lg btn-block">Return to Administrator Menu</button></a>
+                <hr class="my-4" />
+            </div>
+
+            <div class="row mt-5">
+                <div class="mx-auto">
+                    <!-- 2 column grid layout with text inputs for the first and last names -->
+                    <div class="row mb-4">
+                        <div class="col">
+                        <div class="form-outline">
+                            <input type="text" id="usernameField" class="form-control" />
+                            <label class="form-label" for="usernameField">Username</label>
+                        </div>
+                        </div>
+                        <div class="col">
+                        <div class="form-outline">
+                            <input type="text" id="displayNameField" class="form-control" />
+                            <label class="form-label" for="displayNameField">Display name</label>
+                        </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <input type="email" id="emailField" class="form-control" />
+                        <label class="form-label" for="emailField">Email address</label>
+                    </div>
+                    
+                    <!-- Password input -->
+                    <div class="form-outline mb-4">
+                        <input type="password" id="passwordField" class="form-control" />
+                        <label class="form-label" for="passwordField">Password</label>
+                    </div>
+
+                    <!-- Confirm password input -->
+                    <div class="form-outline mb-4">
+                        <input type="password" id="confirmPasswordField" class="form-control" />
+                        <label class="form-label" for="confirmPasswordField">Confirm password</label>
+                    </div>
+
+                    <div class="dropdown d-flex justify-content-center">
+                        <button class="btn btn-outline-info dropdown-toggle btn-block mb-4" type="button" data-mdb-toggle="dropdown" aria-expanded="false" style="border-color: #ff5027; color: #ff6200;">Choose role</button>
+                        <div class="dropdown-menu" style="width: 100%;">
+
+                            <div class="dropdown-divider"></div>
+                            <div id="roleItems">
+                                <a roleId="Manager" class="dropdown-item" onclick="setRole('Manager')">Manager</a>
+                                <a roleId="Employee" class="dropdown-item" onclick="setRole('Employee')">Employee</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit button -->
+                    <div id="formSubmitLoadingContainer" class="mb-4 d-flex justify-content-center visually-hidden">
+                        <div class="spinner-grow text-light" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <button id="registerBtn" type="submit" onclick="submitRegister()" class="btn btn-primary btn-block mb-4">Sign up</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Confirm logout</h5>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="logoutModalBody" class="modal-body">Are you sure you want to logout from Carsitty part management system?</div>
+                <div class="modal-footer">
+                <button id="logoutModalYesButton" type="button" class="btn btn-success" onclick="logoutUser()">
+                  Yes
+                </button>
+                <button id="logoutModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
+                  No
+                </button>
+                </div>
+            </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="text-center text-white fixed-bottom">    
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: #0a4275;">
+                <b>Carsitty</b> by Preslav Kalinov.
+            </div>
+            <!-- Copyright -->
+        </footer>
+        <!-- End your project here-->
+
+        <!-- MDB -->
+        <script type="text/javascript" src="js/mdb.min.js"></script>
+        <!-- Custom scripts -->
+        <script type="text/javascript"></script>
+    </body>
+</html>
