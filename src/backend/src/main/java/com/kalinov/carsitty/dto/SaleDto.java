@@ -8,7 +8,7 @@ public class SaleDto {
     @Min(value = 0, message = "The part sold quantity must be a positive number")
     private Long soldQuantity;
 
-    public SaleDto(){
+    public SaleDto() {
     }
 
     public Long getSoldQuantity() {
