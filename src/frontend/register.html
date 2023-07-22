@@ -63,7 +63,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" style="background-color: #2673f2;">
                       <li>
-                        <a class="dropdown-item" href="#">My profile data</a>
+                        <a class="dropdown-item" href="profile.html">My profile data</a>
                       </li>
                       <li>
                         <a 
@@ -99,7 +99,7 @@
             </div>
             
             <div id="returnToAdminMenuContainer" class="container my-5 visually-hidden">
-                <a href="index.html"><button type="button" class="btn btn-primary btn-lg btn-block">Return to Administrator Menu</button></a>
+                <a href="administrator.html"><button type="button" class="btn btn-primary btn-lg btn-block">Return to Administrator Menu</button></a>
                 <hr class="my-4" />
             </div>
 
@@ -165,21 +165,21 @@
         <!-- Logout Modal -->
         <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="logoutModalLabel">Confirm logout</h5>
-                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirm logout</h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div id="logoutModalBody" class="modal-body">Are you sure you want to logout from Carsitty part management system?</div>
+                        <div class="modal-footer">
+                        <button id="logoutModalYesButton" type="button" class="btn btn-success" onclick="logoutUser()">
+                        Yes
+                        </button>
+                        <button id="logoutModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
+                        No
+                        </button>
+                    </div>
                 </div>
-                <div id="logoutModalBody" class="modal-body">Are you sure you want to logout from Carsitty part management system?</div>
-                <div class="modal-footer">
-                <button id="logoutModalYesButton" type="button" class="btn btn-success" onclick="logoutUser()">
-                  Yes
-                </button>
-                <button id="logoutModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
-                  No
-                </button>
-                </div>
-            </div>
             </div>
         </div>
         
