@@ -50,15 +50,32 @@ function onPageLoaded() {
     });
 }
 
+function partSearchInputChanged() {
+    const userInput = $("#partSearch").val().trim();
+    const userInputRegex = new RegExp("\\b" + quotemeta(userInput), "i");
+    $('#partsListingTableContent').find('tr').each(function() {
+        const nameColumnText = $(this).find('td#partName').text();
+        const carColumnText = $(this).find('td#carBrand').text();
+        const hasNameMatch = userInputRegex.test(nameColumnText);
+        const hasCarMatch = userInputRegex.test(carColumnText);
+
+        if (!(hasNameMatch || hasCarMatch) && !$(this).hasClass("visually-hidden")) {
+            $(this).addClass("visually-hidden");
+        } else if ((hasNameMatch || hasCarMatch) && $(this).hasClass("visually-hidden")) {
+            $(this).removeClass("visually-hidden");
+        }
+    });
+}
+
 function showPartsListing(result) {
     for(const part of result) {
         let tableRow = "<tr>";
         tableRow += "<td>" + part.id + "</td>";
-        tableRow += "<td>" + part.name + "</td>";
+        tableRow += '<td id="partName">' + part.name + "</td>";
         tableRow += "<td>" + part.quantity + "</td>";
         tableRow += "<td>" + part.price + "</td>";
         tableRow += "<td>" + part.category.name + "</td>";
-        tableRow += "<td>" + part.car.carBrand.brand + ' ' + part.car.model + "</td>";
+        tableRow += '<td id="carBrand">' + part.car.carBrand.brand + ' ' + part.car.model + "</td>";
         tableRow += '<td><a href="edit.html?id=' + part.id + '"><button type="button" class="btn btn-outline-warning btn-rounded" data-mdb-ripple-color="light">Edit</button></a> <button type="button" class="btn btn-outline-danger btn-rounded" data-mdb-ripple-color="light" data-mdb-toggle="modal" data-mdb-target="#deletePartModal" onclick="changePartDeleteModal(' + part.id + ', \'' + part.name + '\', \'' + part.category.name + '\', \'' + part.car.carBrand.brand + '\', \'' + part.car.model + '\')">Delete</button> <a href="sell.html?id='+ part.id + '"> <button type="button" class="btn btn-outline-success btn-rounded" data-mdb-ripple-color="light">Sell</button></a></td>';
         tableRow += "</tr>";
         $("#partsListingTableContent").append(tableRow);
