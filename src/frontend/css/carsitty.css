@@ -9,3 +9,7 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.image-fixed-height {
+    height: 250px; /* Set the desired height for the images */
+}
