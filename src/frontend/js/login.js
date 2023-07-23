@@ -6,7 +6,7 @@ $.ajax({
     },
     crossDomain: true,
     success: function(result) {
-        window.location.href = "index.html";
+        onLoginPageSuccess(result);
     }
 });
 
@@ -52,10 +52,7 @@ function submitLogin() {
             hideElement("#loadingContainer");
             showElement("#successMessageContainer");
             console.log("Logged in");
-
-            window.location.href = "index.html";
-            
-            // Do something with the result
+            onLoginPageSuccess(result);
         },
         error: function(xhr, status, code) {
             hideElement("#loadingContainer");
@@ -93,6 +90,24 @@ function validateField(fieldId, minLength, maxLength, errorMessage) {
 function onLoginPageError(xhr, status, code) {
     showElement("#loginBtn");
     showLoginError(xhr, status, code);
+}
+
+function onLoginPageSuccess(user) {
+    let userRole = user.role;
+    let mainPage = "";
+    if (userRole === "Employee") {
+        mainPage = "dashboard.html";
+    }
+
+    if (userRole === "Manager") {
+        mainPage = "dashboard.html";
+    }
+
+    if (userRole === "Administrator") {
+        mainPage = "administrator.html";
+    }
+
+    window.location.href = mainPage;
 }
 
 function showLoginError(xhr, status, code) {
