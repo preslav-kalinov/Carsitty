@@ -7,7 +7,7 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Parts Listing | Carsitty</title>
+    <title>User Managements | Carsitty</title>
     <!-- MDB icon -->
     <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
     <!-- Font Awesome -->
@@ -35,8 +35,8 @@
     <script src="js/config.js"></script>
     <!-- Util -->
     <script src="js/util.js"></script>
-    <!--Product Listing-->
-    <script src="js/partsListing.js"></script>
+    <!--Users Listing-->
+    <script src="js/usersListing.js"></script>
   </head>
 
   <body onload="onPageLoaded()">
@@ -44,7 +44,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container-fluid d-flex justify-content-center">
-        <div class="navbar-brand">Parts Listing</div>
+        <div class="navbar-brand">User Management</div>
       </div>
 
       <div class="d-flex align-items-center">
@@ -86,55 +86,49 @@
     </div>
 
     <div id="errorMessageContainer" class="container my-5 visually-hidden">
-      <div id="errorMessage" class="alert alert-danger" role="alert">
-          <i class="fas fa-times-circle me-3"></i><span id="errorMessageContent"></span>
-      </div>
-    </div>
-
-    <div id="addPartContainer" class="container my-5 visually-hidden">
-      <a href="add.html"><button type="button" class="btn btn-primary btn-lg btn-block">Add part</button></a>
-      <hr class="my-4" />
+        <div id="errorMessage" class="alert alert-danger" role="alert">
+            <i class="fas fa-times-circle me-3"></i><span id="errorMessageContent"></span>
+        </div>
     </div>
 
     <div class="container">
       <div class="form-outline mb-4 mx-3 my-3" style="background-color: #3c3c3c;">
-        <input oninput="partSearchInputChanged()" type="text" id="partSearch" class="form-control"/>
-        <label class="form-label" for="partSearch">Search (by Name or Car)</label>
+        <input oninput="userSearchInputChanged()" type="text" id="userSearch" class="form-control"/>
+        <label class="form-label" for="userSearch">Search (by Username)</label>
       </div>
     </div>
     
-    <div id="partsListingContainer" class="container-fluid my-5 table-responsive visually-hidden">
+    <div id="usersListingContainer" class="container-fluid my-5 table-responsive visually-hidden">
       <table class="table table-striped table-hover text-center">
         <thead class="table-dark">
           <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Price</th>
-            <th scope="col">Category</th>
-            <th scope="col">Car</th>
+            <th scope="col">Username</th>
+            <th scope="col">Display Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Role</th>
+            <th scope="col">Status</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
-        <tbody id="partsListingTableContent">
+        <tbody id="usersListingTableContent">
         </tbody>
       </table>
     </div>
 
     <!-- Delete Modal -->
-    <div class="modal fade" id="deletePartModal" tabindex="-1" aria-labelledby="deletePartModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deletePartModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="deletePartModalLabel">Confirm part deletion</h5>
+            <h5 class="modal-title" id="deleteUserModalLabel">Confirm user deletion</h5>
             <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div id="deletePartModalBody" class="modal-body"></div>
+          <div id="deleteUserModalBody" class="modal-body"></div>
           <div class="modal-footer">
-            <button id="deletePartModalYesButton" type="button" class="btn btn-success">
+            <button id="deleteUserModalYesButton" type="button" class="btn btn-success">
               Yes
             </button>
-            <button id="deletePartModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
+            <button id="deleteUserModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
               No
             </button>
           </div>
