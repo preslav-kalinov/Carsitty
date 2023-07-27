@@ -19,6 +19,18 @@ function showLoggedUserInfo(result) {
     $("#loggedUserInfo").append(loggedUser);
 }
 
+function getUserEndpoint(userRole) {
+    let userEndpoint = "";
+
+    if (userRole === "Manager") {
+        userEndpoint = "/managers/";
+    } else if (userRole === "Employee") {
+        userEndpoint = "/employees/";
+    }
+
+    return userEndpoint;
+}
+
 function logoutUser() {
     $.ajax({
         type: 'GET',

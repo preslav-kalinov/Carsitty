@@ -98,15 +98,7 @@ function submitRegister() {
     
     hideElement("#errorMessageContainer");
 
-    let registerEndpoint = "";
-    if (roleChosen === "Manager") {
-        registerEndpoint = "/managers";
-    }
-
-    if (roleChosen === "Employee") {
-        registerEndpoint = "/employees";
-    }
-
+    let endpoint = getUserEndpoint(roleChosen);
     const dataToBeSent = {
         username: $("#usernameField").val(),
         displayName: $("#displayNameField").val(),
@@ -117,7 +109,7 @@ function submitRegister() {
 
     $.ajax({
         type: 'POST',
-        url: APICONFIG.host + '/users' + registerEndpoint,
+        url: APICONFIG.host + '/users' + endpoint,
         xhrFields: {
             withCredentials: true            
         },
@@ -130,10 +122,7 @@ function submitRegister() {
             showElement("#registerBtn");
             console.log("User registered");
 
-            userRegisterSuccessful()
-            //window.location.href = "dashboard.html";
-            
-            // Do something with the result
+            userRegisterSuccessful();
         },
         error: function(xhr, status, code) {
             hideElement("#loadingContainer");
@@ -167,7 +156,7 @@ function userRegisterSuccessful() {
 
     $("#usernameField").val("");
     $("#displayNameField").val("");
-    $("#emailField").val("")
+    $("#emailField").val("");
     $("#passwordField").val("");
     $("#confirmPasswordField").val("");
 }
