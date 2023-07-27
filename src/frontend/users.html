@@ -91,10 +91,15 @@
         </div>
     </div>
 
+    <div id="returnToAdminMenuContainer" class="container my-5 visually-hidden">
+        <a href="administrator.html"><button type="button" class="btn btn-primary btn-lg btn-block">Return to Administrator Menu</button></a>
+        <hr class="my-4" />
+    </div>
+
     <div class="container">
       <div class="form-outline mb-4 mx-3 my-3" style="background-color: #3c3c3c;">
         <input oninput="userSearchInputChanged()" type="text" id="userSearch" class="form-control"/>
-        <label class="form-label" for="userSearch">Search (by Username)</label>
+        <label class="form-label" for="userSearch">Search (by Username, Display name, Email or Role)</label>
       </div>
     </div>
     
@@ -129,6 +134,27 @@
               Yes
             </button>
             <button id="deleteUserModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
+              No
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change Status Modal -->
+    <div class="modal fade" id="changeStatusModal" tabindex="-1" aria-labelledby="changeStatusModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="changeStatusModalLabel">Confirm user status change</h5>
+            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div id="changeStatusModalBody" class="modal-body"></div>
+          <div class="modal-footer">
+            <button id="changeStatusModalYesButton" type="button" class="btn btn-success">
+              Yes
+            </button>
+            <button id="changeStatusModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
               No
             </button>
           </div>
