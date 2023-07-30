@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 
 public class PartDto {
     private Long id;
+    private String pictureUrl;
     private String name;
+    private String oem;
     private Long quantity;
     private BigDecimal price;
     private Long categoryId;
@@ -21,12 +23,28 @@ public class PartDto {
         this.id = id;
     }
 
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOem() {
+        return oem;
+    }
+
+    public void setOem(String oem) {
+        this.oem = oem;
     }
 
     public Long getQuantity() {

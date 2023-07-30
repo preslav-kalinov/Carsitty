@@ -32,7 +32,9 @@ CREATE TABLE `logs` (
 
 CREATE TABLE `parts` (
   `id` bigint(20) NOT NULL,
+  `pictureUrl` varchar(1024) DEFAULT NULL,
   `name` varchar(1024) CHARACTER SET utf8 NOT NULL,
+  `oem` varchar(128) CHARACTER SET utf8 NOT NULL,
   `quantity` bigint(20) UNSIGNED NOT NULL,
   `price` decimal(10,2) UNSIGNED NOT NULL DEFAULT 0.00,
   `categoryId` bigint(20) NOT NULL,
@@ -82,6 +84,7 @@ ALTER TABLE `logs`
 
 ALTER TABLE `parts`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `oem` (`oem`),
   ADD KEY `categoryId` (`categoryId`),
   ADD KEY `carId` (`carId`),
   ADD KEY `userId` (`userId`) USING BTREE;

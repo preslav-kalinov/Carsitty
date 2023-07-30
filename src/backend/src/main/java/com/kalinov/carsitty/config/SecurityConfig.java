@@ -52,6 +52,10 @@ public class SecurityConfig {
                 .antMatchers( "/users").hasAuthority(RoleEnum.Administrator.toString())
                 .antMatchers("/users/*").hasAuthority(RoleEnum.Administrator.toString())
 
+                .antMatchers( "/users").hasAuthority(RoleEnum.Administrator.toString())
+                .antMatchers("/users/employees/*").hasAuthority(RoleEnum.Administrator.toString())
+                .antMatchers("/users/managers/*").hasAuthority(RoleEnum.Administrator.toString())
+
                 .antMatchers(HttpMethod.POST, "/backup").hasAuthority(RoleEnum.Administrator.toString())
 
                 .antMatchers(HttpMethod.GET, "/parts").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString(), RoleEnum.Employee.toString())
@@ -90,7 +94,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource(@Value("${http.allowed-origins}") String httpAllowedOrigins) {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(httpAllowedOrigins.split(",")));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

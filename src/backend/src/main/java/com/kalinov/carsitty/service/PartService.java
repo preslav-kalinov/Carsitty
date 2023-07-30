@@ -73,7 +73,9 @@ public class PartService {
         Car car = this.carDao.findById(newPartDto.getCarId()).get();
 
         Part part = new Part();
+        part.setPictureUrl(newPartDto.getPictureUrl());
         part.setName(newPartDto.getName());
+        part.setOem(newPartDto.getOem());
         part.setQuantity(newPartDto.getQuantity());
         part.setPrice(newPartDto.getPrice());
         part.setCategory(category);
@@ -95,7 +97,9 @@ public class PartService {
         Car car = carDao.findById(newPartDto.getCarId()).get();
 
         Part part = partDao.getReferenceById(partId);
+        part.setPictureUrl(newPartDto.getPictureUrl());
         part.setName(newPartDto.getName());
+        part.setOem(newPartDto.getOem());
         part.setQuantity(newPartDto.getQuantity());
         part.setPrice(newPartDto.getPrice());
         part.setCategory(category);

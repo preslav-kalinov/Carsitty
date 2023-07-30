@@ -7,9 +7,15 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 public class NewPartDto {
+    private String pictureUrl;
+
     @NotBlank(message = "The part name cannot be empty")
     @Size(min = 3, max = 1024, message = "The part name must be between 3 and 1024 characters long")
     private String name;
+
+    @NotBlank(message = "The part oem cannot be empty")
+    @Size(min = 3, max = 128, message = "The part oem must be between 3 and 128 characters long")
+    private String oem;
 
     @NotNull(message = "The part quantity cannot be empty")
     @Min(value = 0, message = "The part quantity must be a positive number")
@@ -28,12 +34,28 @@ public class NewPartDto {
     public NewPartDto() {
     }
 
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOem() {
+        return oem;
+    }
+
+    public void setOem(String oem) {
+        this.oem = oem;
     }
 
     public Long getQuantity() {

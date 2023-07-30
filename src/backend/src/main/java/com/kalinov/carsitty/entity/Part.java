@@ -12,8 +12,14 @@ public class Part implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "pictureUrl")
+    private String pictureUrl;
+
     @Column(name = "name")
     private String name;
+
+    @Column(name = "oem")
+    private String oem;
 
     @Column(name = "quantity")
     private Long quantity;
@@ -44,12 +50,28 @@ public class Part implements Serializable {
         this.id = id;
     }
 
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOem() {
+        return oem;
+    }
+
+    public void setOem(String oem) {
+        this.oem = oem;
     }
 
     public Long getQuantity() {
