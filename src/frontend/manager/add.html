@@ -7,9 +7,9 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>My Profile | Carsitty</title>
+    <title>Add Part | Carsitty</title>
     <!-- MDB icon -->
-    <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
     <!-- Font Awesome -->
     <link
       rel="stylesheet"
@@ -21,28 +21,28 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
     />
     <!-- Dark MDB theme -->
-    <link rel="stylesheet" href="css/mdb.dark.min.css" />
+    <link rel="stylesheet" href="../css/mdb.dark.min.css" />
     <!-- Regular MDB theme -->
-    <!-- <link rel="stylesheet" href="css/mdb.min.css" /> -->
+    <!-- <link rel="stylesheet" href="../css/mdb.min.css" /> -->
 
     <!-- Auto Parts Manager CSS -->
-    <link rel="stylesheet" href="css/carsitty.css" />
+    <link rel="stylesheet" href="../css/carsitty.css" />
     
     <!-- JQuery -->
-    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="../js/jquery-3.6.0.min.js"></script>
     <!--API config-->
-    <script src="js/config.js"></script>
+    <script src="../js/config.js"></script>
     <!-- Util -->
-    <script src="js/util.js"></script>
-    <!-- My Profile -->
-    <script src="js/profile.js"></script>
+    <script src="../js/util.js"></script>
+    <!-- Add Part -->
+    <script src="../js/addPart.js"></script>
   </head>
   <body onload="onPageLoaded()">
         <!-- Start your project here-->
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid d-flex justify-content-center">
-                <div class="navbar-brand">My profile data</div>
+                <div class="navbar-brand">Add Part</div>
             </div>
 
             <div class="d-flex align-items-center">
@@ -61,7 +61,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" style="background-color: #2673f2;">
                       <li>
-                        <a class="dropdown-item" href="profile.html">My profile data</a>
+                        <a class="dropdown-item" href="../profile.html">My profile data</a>
                       </li>
                       <li>
                         <a 
@@ -89,16 +89,21 @@
             </div>
         </div>
 
-        <div id="returnToMainMenuContainer" class="container my-5 visually-hidden">
-            <a href="#"><button type="button" onclick="onReturnToMainMenu()" class="btn btn-primary btn-lg btn-block">Return to Main Menu</button></a>
+        <div id="successMessageContainer" class="container my-5 visually-hidden">
+            <div class="alert alert-success" role="alert">
+                <i class="fas fa-check-circle me-3"></i>Part added successfully</span>
+            </div>
+        </div>
+
+        <div id="returnToPartsListingContainer" class="container my-5 visually-hidden">
+            <a href="../dashboard.html"><button type="button" class="btn btn-primary btn-lg btn-block">Return to Parts Listing</button></a>
             <hr class="my-4" />
         </div>
- 
-        <div id="myProfileForm" class="container visually-hidden">
-
+        
+        <div id="addPartForm" class="container visually-hidden">
             <div class="form-outline mb-4">
-                <input type="number" id="userId" class="form-control active" autocomplete="off" disabled/>
-                <label class="form-label" for="userId" style="margin-left: 0px">ID</label>
+                <input type="text" id="partName" class="form-control" autocomplete="off"/>
+                <label class="form-label" for="partName" style="margin-left: 0px">Part name</label>
                 <div class="form-notch">
                     <div class="form-notch-leading" style="width: 9px"></div>
                     <div
@@ -110,8 +115,8 @@
             </div>
 
             <div class="form-outline mb-4">
-                <input type="text" id="userName" class="form-control active" autocomplete="off" disabled/>
-                <label class="form-label" for="userName" style="margin-left: 0px">Username</label>
+                <input type="number" id="partQuantity" class="form-control" autocomplete="off"/>
+                <label class="form-label" for="partQuantity" style="margin-left: 0px">Quantity</label>
                 <div class="form-notch">
                     <div class="form-notch-leading" style="width: 9px"></div>
                     <div
@@ -123,8 +128,8 @@
             </div>
 
             <div class="form-outline mb-4">
-                <input type="text" id="displayName" class="form-control active" autocomplete="off" disabled/>
-                <label class="form-label" for="displayName" style="margin-left: 0px">Display Name</label>
+                <input type="number" id="partPrice" class="form-control" autocomplete="off"/>
+                <label class="form-label" for="partPrice" style="margin-left: 0px">Price</label>
                 <div class="form-notch">
                     <div class="form-notch-leading" style="width: 9px"></div>
                     <div
@@ -135,31 +140,37 @@
                 </div>
             </div>
 
-            <div class="form-outline mb-4">
-                <input type="text" id="userEmail" class="form-control active" autocomplete="off" disabled/>
-                <label class="form-label" for="userEmail" style="margin-left: 0px">Email</label>
-                <div class="form-notch">
-                    <div class="form-notch-leading" style="width: 9px"></div>
-                    <div
-                    class="form-notch-middle"
-                    style="width: 88.8px"
-                    ></div>
-                    <div class="form-notch-trailing"></div>
+            <div class="dropdown d-flex justify-content-center">
+                <button class="btn btn-outline-info dropdown-toggle btn-block mb-4" type="button" data-mdb-toggle="dropdown" aria-expanded="false">Pick a category</button>
+                <div class="dropdown-menu" style="width: 100%;">
+                    <div class="form-outline mb-4 mx-3 my-3">
+                        <input oninput="categorySearchInputChanged()" type="text" id="categorySearch" class="form-control" />
+                        <label class="form-label" for="categorySearch">Search</label>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div id="categoryItems"></div>
                 </div>
             </div>
 
-            <div class="form-outline mb-4">
-                <input type="text" id="userRole" class="form-control active" autocomplete="off" disabled/>
-                <label class="form-label" for="userRole" style="margin-left: 0px">Role</label>
-                <div class="form-notch">
-                    <div class="form-notch-leading" style="width: 9px"></div>
-                    <div
-                    class="form-notch-middle"
-                    style="width: 88.8px"
-                    ></div>
-                    <div class="form-notch-trailing"></div>
+            <div class="dropdown d-flex justify-content-center">
+                <button class="btn btn-outline-light dropdown-toggle btn-block mb-4" type="button" data-mdb-toggle="dropdown" aria-expanded="false">Pick a car</button>
+                <div class="dropdown-menu" style="width: 100%;">
+                    <div class="form-outline mb-4 mx-3 my-3">
+                        <input oninput="carSearchInputChanged()" type="text" id="carSearch" class="form-control" />
+                        <label class="form-label" for="carSearch">Search</label>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div id="carItems"></div>
                 </div>
             </div>
+
+            <!-- Submit button -->
+            <div id="formSubmitLoadingContainer" class="mb-4 d-flex justify-content-center visually-hidden">
+                <div class="spinner-grow text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <button id="formSubmitButton" onclick="submitPart()" type="button" class="btn btn-primary btn-block mb-4">Add part</button>
         </div>
 
         <!-- Logout Modal -->
@@ -172,7 +183,7 @@
                     </div>
                     <div id="logoutModalBody" class="modal-body">Are you sure you want to logout from Carsitty part management system?</div>
                     <div class="modal-footer">
-                        <a href="logout.html" class="btn btn-success"> 
+                        <a href="../logout.html" class="btn btn-success"> 
                             Yes 
                         </a>
                         <button id="logoutModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
@@ -194,7 +205,7 @@
         <!-- End your project here-->
 
         <!-- MDB -->
-        <script type="text/javascript" src="js/mdb.min.js"></script>
+        <script type="text/javascript" src="../js/mdb.min.js"></script>
         <!-- Custom scripts -->
         <script type="text/javascript"></script>
     </body>

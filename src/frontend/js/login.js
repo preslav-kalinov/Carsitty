@@ -94,20 +94,7 @@ function onLoginPageError(xhr, status, code) {
 
 function onLoginPageSuccess(user) {
     let userRole = user.role;
-    let mainPage = "";
-    if (userRole === "Employee") {
-        mainPage = "dashboard.html";
-    }
-
-    if (userRole === "Manager") {
-        mainPage = "dashboard.html";
-    }
-
-    if (userRole === "Administrator") {
-        mainPage = "administrator.html";
-    }
-
-    window.location.href = mainPage;
+    redirectToPageBasedOnRole(userRole);
 }
 
 function showLoginError(xhr, status, code) {

@@ -11,7 +11,7 @@ $.ajax({
     },
     crossDomain: true,
     error: function(xhr, status, code) {
-        window.location.href = "login.html";
+        window.location.href = "../login.html";
     }
 });
 

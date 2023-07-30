@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Logout | Carsitty</title>
+        <!-- MDB icon -->
+        <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+        <!-- Font Awesome -->
+        <link
+          rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        />
+        <!-- Google Fonts Roboto -->
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+        />
+        <!-- Dark MDB theme -->
+        <link rel="stylesheet" href="css/mdb.dark.min.css" />
+    
+        <!-- Regular MDB theme -->
+        <!-- <link rel="stylesheet" href="css/mdb.min.css" /> -->
+    
+        <!-- Auto Parts Manager CSS -->
+        <link rel="stylesheet" href="css/carsitty.css" />
+        
+        <!-- JQuery -->
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <!--API config-->
+        <script src="js/config.js"></script>
+        <!-- Util -->
+        <script src="js/util.js"></script>
+        <!--Logout-->
+        <script src="js/logout.js"></script>
+
+    </head>
+
+    <body onload="logoutUser()">
+        <!-- Start your project here-->
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid d-flex justify-content-center">
+                <div class="navbar-brand">Logout</div>
+            </div>
+        </nav>
+
+        <div id="logoutMessageContainer" class="container my-5">
+            <div  id="logoutMessage" class="alert alert-primary" role="alert">
+                <i class="fas fa-check-circle me-3"></i><span id="logoutMessageContent">Logging you out...</span>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-white fixed-bottom">    
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: #0a4275;">
+                <b>Carsitty</b> by Preslav Kalinov.
+            </div>
+            <!-- Copyright -->
+        </footer>
+        <!-- End your project here-->
+
+        <!-- MDB -->
+        <script type="text/javascript" src="js/mdb.min.js"></script>
+        <!-- Custom scripts -->
+        <script type="text/javascript"></script>
+    </body>
+</html>

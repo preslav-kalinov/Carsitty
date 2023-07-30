@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Administrator Portal | Carsitty</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+    />
+    <!-- Dark MDB theme -->
+    <link rel="stylesheet" href="../css/mdb.dark.min.css" />
+
+    <!-- Regular MDB theme -->
+    <!-- <link rel="stylesheet" href="../css/mdb.min.css" /> -->
+
+    <!-- Auto Parts Manager CSS -->
+    <link rel="stylesheet" href="../css/carsitty.css" />
+    
+    <!-- JQuery -->
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <!--API config-->
+    <script src="../js/config.js"></script>
+    <!-- Util -->
+    <script src="../js/util.js"></script>
+    <!--Product Listing-->
+    <script src="../js/administrator.js"></script>
+  </head>
+
+  <body>
+    <!-- Start your project here-->
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid d-flex justify-content-center">
+        <div class="navbar-brand">Administrator Portal</div>
+      </div>
+
+      <div class="d-flex align-items-center">
+        <ul class="navbar-nav d-flex flex-row">
+          <!-- Icon dropdown -->
+          <li class="nav-item me-3 me-lg-0 dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-mdb-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="fas fa-user"></i>
+              <!--<strong id="loggedUserInfo"></strong>-->
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" style="background-color: #2673f2;">
+              <li>
+                <a class="dropdown-item" href="../profile.html">My profile data</a>
+              </li>
+              <li>
+                <a 
+                  class="dropdown-item" 
+                  href="#"
+                  data-mdb-toggle="modal"
+                  data-mdb-target="#logoutModal"
+                  >Logout</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div id="loadingContainer" class="container my-5 d-flex justify-content-center">
+      <div class="spinner-grow text-danger" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div id="errorMessageContainer" class="container my-5 visually-hidden">
+        <div id="errorMessage" class="alert alert-danger" role="alert">
+            <i class="fas fa-times-circle me-3"></i><span id="errorMessageContent"></span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="menuTiles" class="row gx-5 my-5 d-flex justify-content-center"> 
+            
+            <div class="col-sm-4 my-5">
+                <div class="card h-100">
+                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                    <img src="https://st.depositphotos.com/1092019/4610/i/450/depositphotos_46103085-stock-photo-sing-up-on-red-keyboard.jpg" class="img-fluid image-fixed-height"/>
+                    <a href="#!">
+                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </a>
+                    </div>
+                    <div class="card-body">
+                    <h5 class="card-title">Sign up a new user</h5>
+                    <p class="card-text">Leads you to a sign up menu, where the new users of the system are created based on dedicated role.</p>
+                    <a href="register.html" class="btn btn-primary button-block ripple-surface col-md-4 offset-md-4">Navigate</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-sm-4 my-5">
+                <div class="card h-100">
+                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                    <img src="https://dinahosting.com/blog/upload/2022/04/estructura-web.jpg" class="img-fluid image-fixed-height"/>
+                    <a href="#!">
+                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </a>
+                    </div>
+                    <div class="card-body">
+                    <h5 class="card-title">System logs and backup utility</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#!" class="btn btn-primary button-block ripple-surface col-md-4 offset-md-4">Navigate</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4 my-5">
+                <div class="card h-100">
+                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                    <img src="https://www.egnyte.com/sites/default/files/inline-images/The%20expansion%20of%20cloud%20applications%20has%20added%20to....png" class="img-fluid image-fixed-height"/>
+                    <a href="#!">
+                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </a>
+                    </div>
+                    <div class="card-body">
+                    <h5 class="card-title">Manage users</h5>
+                    <p class="card-text">Leads you to the user management menu where the user lifecycle is controlled.</p>
+                    <a href="users.html" class="btn btn-primary button-block ripple-surface col-md-4 offset-md-4">Navigate</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="logoutModalLabel">Confirm logout</h5>
+              <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="logoutModalBody" class="modal-body">Are you sure you want to logout from Carsitty part management system?</div>
+            <div class="modal-footer">
+              <a href="../logout.html" class="btn btn-success"> 
+                Yes 
+              </a>
+              <button id="logoutModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+      
+    <!-- Footer -->
+    <footer class="text-center text-white fixed-bottom">    
+      <!-- Copyright -->
+      <div class="text-center p-3" style="background-color: #0a4275;">
+        <b>Carsitty</b> by Preslav Kalinov.
+      </div>
+      <!-- Copyright -->
+    </footer>
+    <!-- End your project here-->
+
+    <!-- MDB -->
+    <script type="text/javascript" src="../js/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+  </body>
+</html>

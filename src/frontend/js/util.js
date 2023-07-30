@@ -31,29 +31,21 @@ function getUserEndpoint(userRole) {
     return userEndpoint;
 }
 
-function logoutUser() {
-    $.ajax({
-        type: 'GET',
-        url: APICONFIG.host + '/logout',
-        xhrFields: {
-            withCredentials: true
-        },
-        crossDomain: true,
-        success: function (result) {
-            window.location.href = "login.html";
-        },
-        error: function (xhr, status, error)
-        {
-            if(xhr.status == 401)
-            {
-                window.location.href = "login.html";
-                return;
-            }
+function redirectToPageBasedOnRole(userRole) {
+    let mainPage = "";
+    if (userRole === "Employee") {
+        mainPage = "dashboard.html";
+    }
 
-            showElement("#errorMessageContainer");
-            $("#errorMessageContent").append("An error has occurred during the log out.");
-        }
-    });
+    if (userRole === "Manager") {
+        mainPage = "dashboard.html";
+    }
+
+    if (userRole === "Administrator") {
+        mainPage = "../carsitty/administrator/administrator.html";
+    }
+
+    window.location.href = mainPage;
 }
 
 function quotemeta(text) {

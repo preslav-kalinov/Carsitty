@@ -2,6 +2,7 @@ let categories;
 let cars;
 let categoryChosen;
 let carChosen;
+let currentRole;
 
 $.ajax({
     type: 'GET',
@@ -11,7 +12,8 @@ $.ajax({
     },
     crossDomain: true,
     success: function(result) {
-        showLoggedUserInfo(result)
+        currentRole = result.role;
+        showLoggedUserInfo(result);
     },
     error: function(xhr, status, code) {
         window.location.href = "login.html";
@@ -19,6 +21,15 @@ $.ajax({
 });
 
 function onPageLoaded() {
+    if (currentRole === "Employee" || currentRole === "Administrator") {
+        hideElement("#returnToPartsListingContainer");
+        hideElement("#addPartForm");
+        showElement("#errorMessageContainer");
+
+        $("#errorMessageContent").append("Authorization not enough");
+        return;
+    }
+
     $.ajax({
         type: 'GET',
         url: APICONFIG.host + '/parts/categories',

@@ -68,18 +68,5 @@ function partEditedSuccessfully() {
 
 function onReturnToMainMenu() {
     let userRole = $("#userRole").val();
-    let mainPage = "";
-    if (userRole === "Employee") {
-        mainPage = "dashboard.html";
-    }
-
-    if (userRole === "Manager") {
-        mainPage = "dashboard.html";
-    }
-
-    if (userRole === "Administrator") {
-        mainPage = "administrator.html";
-    }
-
-    window.location.href = mainPage;
+    redirectToPageBasedOnRole(userRole);
 }
