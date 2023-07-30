@@ -91,8 +91,12 @@
       </div>
     </div>
 
-    <div id="addPartContainer" class="container my-5 visually-hidden">
-      <a href="add.html"><button type="button" class="btn btn-primary btn-lg btn-block">Add part</button></a>
+    <div id="returnToManagerMenuContainer" class="container my-4 visually-hidden">
+      <a href="manager/manager.html"><button type="button" class="btn btn-primary btn-lg btn-block">Return to Manager Portal</button></a>
+    </div>
+
+    <div id="addPartContainer" class="container my-4 visually-hidden">
+      <a href="manager/add.html"><button type="button" class="btn btn-primary btn-lg btn-block">Add part</button></a>
       <hr class="my-4" />
     </div>
 
@@ -152,9 +156,9 @@
           </div>
           <div id="logoutModalBody" class="modal-body">Are you sure you want to logout from Carsitty part management system?</div>
           <div class="modal-footer">
-            <button id="logoutModalYesButton" type="button" class="btn btn-success" onclick="logoutUser()">
-              Yes
-            </button>
+            <a href="logout.html" class="btn btn-success"> 
+              Yes 
+            </a>
             <button id="logoutModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
               No
             </button>

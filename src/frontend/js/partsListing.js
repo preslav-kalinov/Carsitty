@@ -24,6 +24,7 @@ function onPageLoaded() {
         success: function (result) {
             hideElement("#loadingContainer");
             hideElement("#errorMessageContainer");
+            showElement("#returnToManagerMenuContainer");
             showElement("#addPartContainer");
             showElement("#partsListingContainer");
             showPartsListing(result);
@@ -31,6 +32,7 @@ function onPageLoaded() {
         error: function(xhr, status, code) {
             hideElement("#loadingContainer");
             showElement("#errorMessageContainer");
+            showElement("#returnToManagerMenuContainer");
             hideElement('#addPartContainer');
             hideElement('#partsListingContainer');
             

@@ -1,3 +1,5 @@
+let currentUserRole;
+
 $.ajax({
     type: 'GET',
     url: APICONFIG.host + '/me',
@@ -7,9 +9,10 @@ $.ajax({
     crossDomain: true,
     success: function(result) {
         showLoggedUserInfo(result)
+        currentUserRole = result.role;
     },
     error: function(xhr, status, code) {
-        window.location.href = "login.html";
+        window.location.href = "../login.html";
     }
 });
 
@@ -83,9 +86,13 @@ function showUsersListing(result) {
         tableRow += '<td id="userEmail">' + user.email + "</td>";
         tableRow += '<td id="userRole">' + user.role + "</td>";
         tableRow += "<td>" + userStatus + "</td>";
-        tableRow += '<td><a href="update_user.html?username=' + user.username + '"><button type="button" class="btn btn-outline-success btn-rounded ' + hideUpdate + '" data-mdb-ripple-color="light">Update</button>\
-        </a> <button type="button" class="btn btn-outline-danger btn-rounded" data-mdb-ripple-color="light" data-mdb-toggle="modal" data-mdb-target="#deleteUserModal" onclick="changeUserDeleteModal(\'' + user.username + '\', \'' + user.role + '\')">Delete</button>\
-        <button id="manageUserStatus" type="button" class="btn btn-outline-' + manageUserStatusBtnColor + ' btn-rounded" data-mdb-ripple-color="light" data-mdb-toggle="modal" data-mdb-target="#changeStatusModal" onclick="changeUserStatusModal(\'' + user.username + '\', \'' + user.role + '\', \'' + manageUserStatusBtnName + '\')">' + manageUserStatusBtnName + '</button></td>';
+
+        if (currentUserRole === "Administrator"){
+            tableRow += '<td><a href="update_user.html?username=' + user.username + '"><button type="button" class="btn btn-outline-success btn-rounded ' + hideUpdate + '" data-mdb-ripple-color="light">Update</button></a> \
+<button type="button" class="btn btn-outline-danger btn-rounded" data-mdb-ripple-color="light" data-mdb-toggle="modal" data-mdb-target="#deleteUserModal" onclick="changeUserDeleteModal(\'' + user.username + '\', \'' + user.role + '\')">Delete</button>\
+<button id="manageUserStatus" type="button" class="btn btn-outline-' + manageUserStatusBtnColor + ' btn-rounded" data-mdb-ripple-color="light" data-mdb-toggle="modal" data-mdb-target="#changeStatusModal" onclick="changeUserStatusModal(\'' + user.username + '\', \'' + user.role + '\', \'' + manageUserStatusBtnName + '\')">' + manageUserStatusBtnName + '</button></td>';
+        }
+
         tableRow += "</tr>";
 
         $("#usersListingTableContent").append(tableRow);
