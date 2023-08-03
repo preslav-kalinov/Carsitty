@@ -34,8 +34,7 @@ public class LogService {
         if (this.logDao.count() == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Part logs not found");
         }
-        List<LogDto> logDtoList = this.modelMapper.mapList(this.logDao.findAll(), LogDto.class);
-        return logDtoList;
+        return this.modelMapper.mapList(this.logDao.findAll(), LogDto.class);
     }
 
     public void logCreatedPart(String partName) {

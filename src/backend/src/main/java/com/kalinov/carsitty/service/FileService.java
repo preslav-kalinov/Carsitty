@@ -1,7 +1,5 @@
 package com.kalinov.carsitty.service;
 
-import org.apache.logging.log4j.Level;
-
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;

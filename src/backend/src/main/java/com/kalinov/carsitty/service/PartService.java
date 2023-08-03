@@ -19,7 +19,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +56,16 @@ public class PartService {
     //operation to get a part by id
     public PartDto getPart(Long id) throws IOException {
         this.validatePartId(id);
-        return this.modelMapper.map(this.partDao.findById(id).get(), PartDto.class);
+        Part part = partDao.findById(id).get();
+        PartDto partDto = modelMapper.map(part, PartDto.class);
+
+        //fetch car IDs and populate the carIds property
+        Set<Long> carIds = part.getCars().stream()
+                .map(Car::getId)
+                .collect(Collectors.toSet());
+        partDto.setCarIds(carIds);
+
+        return partDto;
     }
 
     //operation to get all parts
@@ -70,7 +81,10 @@ public class PartService {
     public Part createPart(NewPartDto newPartDto, User user) throws IOException {
         this.validatePartData(newPartDto);
         Category category = this.categoryDao.findById(newPartDto.getCategoryId()).get();
-        Car car = this.carDao.findById(newPartDto.getCarId()).get();
+
+        List<Car> cars = newPartDto.getCarIds().stream()
+                .map(carId -> this.carDao.findById(carId).get())
+                .collect(Collectors.toList());
 
         Part part = new Part();
         part.setPictureUrl(newPartDto.getPictureUrl());
@@ -79,7 +93,7 @@ public class PartService {
         part.setQuantity(newPartDto.getQuantity());
         part.setPrice(newPartDto.getPrice());
         part.setCategory(category);
-        part.setCar(car);
+        part.setCars(new HashSet<>(cars));
         part.setUser(user);
 
         this.logService.logCreatedPart(part.getName());
@@ -94,7 +108,10 @@ public class PartService {
         this.validatePartId(partId);
         this.validatePartData(newPartDto);
         Category category = categoryDao.findById(newPartDto.getCategoryId()).get();
-        Car car = carDao.findById(newPartDto.getCarId()).get();
+
+        List<Car> cars = newPartDto.getCarIds().stream()
+                .map(carId -> this.carDao.findById(carId).get())
+                .collect(Collectors.toList());
 
         Part part = partDao.getReferenceById(partId);
         part.setPictureUrl(newPartDto.getPictureUrl());
@@ -103,7 +120,7 @@ public class PartService {
         part.setQuantity(newPartDto.getQuantity());
         part.setPrice(newPartDto.getPrice());
         part.setCategory(category);
-        part.setCar(car);
+        part.setCars(new HashSet<>(cars));
 
         this.logService.logUpdatedPart(part.getId(), part.getName());
         this.fileService.writeToFile("Part with ID:" + part.getId() + " and name '" + part.getName() +
@@ -176,10 +193,12 @@ public class PartService {
     }
 
     private void validatePartData(NewPartDto newPartDto) throws IOException {
-        //check for particular car existence
-        if (!this.carDao.existsById(newPartDto.getCarId())) {
-            this.fileService.writeToFile(String.format("The car with ID '%d' does not exist", newPartDto.getCarId()), true);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("The car with ID '%d' does not exist", newPartDto.getCarId()));
+        for (Long carId : newPartDto.getCarIds()) {
+            // Check for particular car existence
+            if (!this.carDao.existsById(carId)) {
+                this.fileService.writeToFile(String.format("The car with ID '%d' does not exist", carId), true);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("The car with ID '%d' does not exist", carId));
+            }
         }
 
         //check for particular category existence
@@ -219,7 +238,14 @@ public class PartService {
     public PartDto getPartById(Long partId) throws IOException {
         this.validatePartId(partId);
         Part part = this.partDao.findById(partId).get();
-        return this.modelMapper.map(part, PartDto.class);
+        PartDto partDto = modelMapper.map(part, PartDto.class);
+
+        Set<Long> carIds = part.getCars().stream()
+                .map(Car::getId)
+                .collect(Collectors.toSet());
+        partDto.setCarIds(carIds);
+
+        return partDto;
     }
 
     public String getPartNameById(Long partId) throws IOException {
@@ -228,11 +254,10 @@ public class PartService {
 
     private List getManagersEmail() {
         List<User> managers = userDao.getUsersByRole(RoleEnum.Manager);
-        List<String> managerEmails = managers.stream()
+
+        return managers.stream()
                 .map(User::getEmail)
                 .collect(Collectors.toList());
-
-        return managerEmails;
     }
 
     public List<Category> getAllCategories() {

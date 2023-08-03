@@ -3,6 +3,10 @@ package com.kalinov.carsitty.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "parts")
@@ -31,9 +35,11 @@ public class Part implements Serializable {
     @JoinColumn(name = "categoryId")
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "carId")
-    private Car car;
+    @ManyToMany
+    @JoinTable(name = "car_parts",
+            joinColumns = @JoinColumn(name = "partId"),
+            inverseJoinColumns = @JoinColumn(name = "carId"))
+    private Set<Car> cars = new HashSet<Car>();
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -98,12 +104,12 @@ public class Part implements Serializable {
         this.category = category;
     }
 
-    public Car getCar() {
-        return car;
+    public Set<Car> getCars() {
+        return cars;
     }
 
-    public void setCar(Car car) {
-        this.car = car;
+    public void setCars(Set<Car> cars) {
+        this.cars = cars;
     }
 
     public User getUser() {

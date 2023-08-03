@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PartDiscountSharingService {
@@ -52,14 +54,26 @@ public class PartDiscountSharingService {
         BigDecimal partDiscount = BigDecimal.valueOf(discountDto.getPartDiscount());
         BigDecimal partPriceAfterDiscount = partPrice.subtract(partDiscount.multiply(partPrice).divide(BigDecimal.valueOf(100)));
 
-        Car car = carDao.getReferenceById(partDto.getCarId());
-        CarBrand brand = car.getCarBrand();
+        List<Car> cars = partDto.getCarIds().stream()
+                .map(carId -> this.carDao.findById(carId).get())
+                .collect(Collectors.toList());
 
-        return String.format("Check out the discounted price for %s used in %s %s at %s:\n\n" +
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Car car : cars) {
+            String carInfo = String.format("%s %s, ", car.getCarBrand().getBrand(), car.getModel());
+            stringBuilder.append(carInfo);
+        }
+
+        String carInfoText = stringBuilder.toString();
+        if (!carInfoText.isEmpty()) {
+            carInfoText = carInfoText.substring(0, carInfoText.length() - 2);
+        }
+
+        return String.format("Check out the discounted price for %s used in %s at %s:\n\n" +
                         "Original Price: %.2f BGN\n" +
                         "Discount: %.0f%%\n" +
                         "Price After Discount: %.2f BGN\n\n" +
                         "Don't miss out on this great deal! Grab your %s now!",
-                partName, brand.getBrand(), car.getModel(), this.companyName, partPrice, partDiscount, partPriceAfterDiscount, partName);
+                partName, carInfoText, this.companyName, partPrice, partDiscount, partPriceAfterDiscount, partName);
     }
 }

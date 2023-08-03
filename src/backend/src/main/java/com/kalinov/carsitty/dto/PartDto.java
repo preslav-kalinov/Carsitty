@@ -1,6 +1,7 @@
 package com.kalinov.carsitty.dto;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 public class PartDto {
     private Long id;
@@ -10,7 +11,7 @@ public class PartDto {
     private Long quantity;
     private BigDecimal price;
     private Long categoryId;
-    private Long carId;
+    private Set<Long> carIds;
 
     public PartDto() {
     }
@@ -71,11 +72,11 @@ public class PartDto {
         this.categoryId = categoryId;
     }
 
-    public Long getCarId() {
-        return carId;
+    public Set<Long> getCarIds() {
+        return carIds;
     }
 
-    public void setCarId(Long carId) {
-        this.carId = carId;
+    public void setCarIds(Set<Long> carIds) {
+        this.carIds = carIds;
     }
 }
