@@ -38,7 +38,7 @@ function redirectToPageBasedOnRole(userRole) {
     }
 
     if (userRole === "Manager") {
-        mainPage = "dashboard.html";
+        mainPage = "../carsitty/manager/manager.html";
     }
 
     if (userRole === "Administrator") {
