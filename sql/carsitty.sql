@@ -19,6 +19,11 @@ CREATE TABLE `car_brands` (
   `brand` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `car_parts` (
+  `carId` bigint(12) NOT NULL,
+  `partId` bigint(12) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `categories` (
   `id` bigint(20) NOT NULL,
   `name` varchar(128) NOT NULL
@@ -38,7 +43,6 @@ CREATE TABLE `parts` (
   `quantity` bigint(20) UNSIGNED NOT NULL,
   `price` decimal(10,2) UNSIGNED NOT NULL DEFAULT 0.00,
   `categoryId` bigint(20) NOT NULL,
-  `carId` bigint(20) NOT NULL,
   `userId` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -75,6 +79,10 @@ ALTER TABLE `car_brands`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `brand` (`brand`);
 
+ALTER TABLE `car_parts`
+  ADD KEY `fk_car_parts_car` (`carId`),
+  ADD KEY `fk_car_parts_part` (`partId`);
+
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
@@ -86,7 +94,6 @@ ALTER TABLE `parts`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `oem` (`oem`),
   ADD KEY `categoryId` (`categoryId`),
-  ADD KEY `carId` (`carId`),
   ADD KEY `userId` (`userId`) USING BTREE;
 
 ALTER TABLE `roles`
@@ -130,8 +137,11 @@ ALTER TABLE `users`
 ALTER TABLE `cars`
   ADD CONSTRAINT `cars_ibfk_1` FOREIGN KEY (`carBrandId`) REFERENCES `car_brands` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+ALTER TABLE `car_parts`
+  ADD CONSTRAINT `fk_car_parts_car` FOREIGN KEY (`carId`) REFERENCES `cars` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_car_parts_part` FOREIGN KEY (`partId`) REFERENCES `parts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 ALTER TABLE `parts`
-  ADD CONSTRAINT `parts_ibfk_1` FOREIGN KEY (`carId`) REFERENCES `cars` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `parts_ibfk_2` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `parts_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
