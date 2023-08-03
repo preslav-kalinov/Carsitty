@@ -58,6 +58,8 @@ public class SecurityConfig {
 
                 .antMatchers(HttpMethod.POST, "/backup").hasAuthority(RoleEnum.Administrator.toString())
 
+                .antMatchers(HttpMethod.GET, "/sales").hasAuthority(RoleEnum.Manager.toString())
+
                 .antMatchers(HttpMethod.GET, "/parts").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString(), RoleEnum.Employee.toString())
                 .antMatchers(HttpMethod.GET, "/parts/*").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString(), RoleEnum.Employee.toString())
                 .antMatchers(HttpMethod.GET, "/parts/categories").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString(), RoleEnum.Employee.toString())

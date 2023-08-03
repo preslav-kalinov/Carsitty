@@ -30,7 +30,7 @@ public class PartsController {
     private final UserDao userDao;
 
     @Autowired
-    public PartsController (PartService partService, LogService logService, UserDao userDao,
+    public PartsController(PartService partService, LogService logService, UserDao userDao,
                             PartDiscountSharingService partDiscountSharingService) {
         this.partService = partService;
         this.logService = logService;
