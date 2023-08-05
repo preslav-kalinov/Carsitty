@@ -1,9 +1,6 @@
 package com.kalinov.carsitty.dto;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +28,7 @@ public class NewPartDto {
     private Long categoryId;
 
     @NotNull(message = "The part cars cannot be empty")
+    @NotEmpty(message = "The part cars cannot be empty")
     private Set<Long> carIds;
 
     public NewPartDto() {

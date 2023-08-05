@@ -4,7 +4,7 @@ import com.kalinov.carsitty.RoleEnum;
 import com.kalinov.carsitty.dao.*;
 import com.kalinov.carsitty.dto.NewPartDto;
 import com.kalinov.carsitty.dto.PartDto;
-import com.kalinov.carsitty.dto.SaleDto;
+import com.kalinov.carsitty.dto.NewSaleDto;
 import com.kalinov.carsitty.entity.*;
 import com.kalinov.carsitty.util.ModelMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,17 +142,17 @@ public class PartService {
     }
 
     //operation to sell a part
-    public Part sellPart(SaleDto saleDto, Long partId, User user) throws MessagingException, IOException {
+    public Part sellPart(NewSaleDto newSaleDto, Long partId, User user) throws MessagingException, IOException {
         this.validatePartId(partId);
         Part part = partDao.findById(partId).get();
-        this.validatePartSale(saleDto, part);
+        this.validatePartSale(newSaleDto, part);
         Long partQuantity = part.getQuantity();
-        partQuantity -= saleDto.getSoldQuantity();
+        partQuantity -= newSaleDto.getSoldQuantity();
         part.setQuantity(partQuantity);
         this.partDao.save(part);
 
-        Sale sale = modelMapper.map(saleDto, Sale.class);
-        BigDecimal soldQuantity = BigDecimal.valueOf(saleDto.getSoldQuantity());
+        Sale sale = modelMapper.map(newSaleDto, Sale.class);
+        BigDecimal soldQuantity = BigDecimal.valueOf(newSaleDto.getSoldQuantity());
         BigDecimal saleProfit = soldQuantity.multiply(part.getPrice());
 
         sale.setPart(part);
@@ -209,10 +209,10 @@ public class PartService {
     }
 
     //availability check
-    private void validatePartSale(SaleDto saleDto, Part part) {
+    private void validatePartSale(NewSaleDto newSaleDto, Part part) {
         Long partQuantity = part.getQuantity();
 
-        if (saleDto.getSoldQuantity() <= 0 || saleDto.getSoldQuantity() > partQuantity) {
+        if (newSaleDto.getSoldQuantity() <= 0 || newSaleDto.getSoldQuantity() > partQuantity) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can sell between 1 and " + partQuantity + " of this product");
         }
     }

@@ -1,5 +1,7 @@
 package com.kalinov.carsitty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -17,6 +19,7 @@ public class User implements Serializable {
     @Column(name = "displayName")
     private String displayName;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 

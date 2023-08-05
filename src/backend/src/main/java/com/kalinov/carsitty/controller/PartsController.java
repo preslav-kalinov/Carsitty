@@ -81,9 +81,9 @@ public class PartsController {
     }
 
     @RequestMapping(value = "/{partId}/sale", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity sellPart(@Valid @RequestBody SaleDto saleDto, @PathVariable Long partId, Authentication authentication) throws MessagingException, IOException {
+    public ResponseEntity sellPart(@Valid @RequestBody NewSaleDto newSaleDto, @PathVariable Long partId, Authentication authentication) throws MessagingException, IOException {
         User user = userDao.getUsersByUsername(authentication.getName()).get(0);
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.partService.sellPart(saleDto, partId, user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.partService.sellPart(newSaleDto, partId, user));
     }
 
     @RequestMapping(value = "/logs", method = RequestMethod.GET)

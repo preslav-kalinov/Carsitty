@@ -1,5 +1,6 @@
 package com.kalinov.carsitty.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kalinov.carsitty.RoleEnum;
 
 import javax.validation.constraints.*;
@@ -14,6 +15,7 @@ public class UserDto {
     @Size(min = 3, max = 1024, message = "The display name length has to be between 3 and 1024 characters")
     private String displayName;
 
+    @JsonIgnore
     @NotBlank(message = "The password must not be empty")
     @Size(min = 6, max = 60, message = "The password length has to be between 6 and 60 characters")
     @Pattern(regexp = "^[^\\s]+$", message = "The password cannot contain whitespaces")

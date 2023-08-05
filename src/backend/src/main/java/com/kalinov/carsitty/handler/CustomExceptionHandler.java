@@ -39,7 +39,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return exceptionService.generateExceptionResponseEntityWithValidationErrors(
-                new ResponseStatusException(HttpStatus.BAD_REQUEST, "One or more fields contain invalid values"),
+                new ResponseStatusException(HttpStatus.BAD_REQUEST, "One or more fields contain invalid values:"),
                 e.getBindingResult().getAllErrors());
     }
 
