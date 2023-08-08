@@ -29,6 +29,7 @@ function onPageLoaded() {
         success: function (result) {
             hideElement("#loadingContainer");
             hideElement("#errorMessageContainer");
+
             showElement("#usersListingContainer");
             showUsersListing(result);
         },
@@ -36,8 +37,15 @@ function onPageLoaded() {
             hideElement("#loadingContainer");
             showElement("#errorMessageContainer");
             hideElement('#usersListingContainer');
+
+            if (xhr.status == 403) {
+                hideElement("#returnToAdminMenuContainer");
+                hideElement("#userSearchField");
+                $("#errorMessageContent").append(JSON.parse(xhr.responseText).errorMessage.problem);
+                return;
+            }
             
-            if (xhr.status == 404 || xhr.status == 401 || xhr.status == 403) {
+            if (xhr.status == 404 || xhr.status == 401) {
                 $("#errorMessageContent").append(JSON.parse(xhr.responseText).errorMessage.problem);
                 return;
             }
@@ -69,33 +77,34 @@ function userSearchInputChanged() {
 }
 
 function showUsersListing(result) {
-    for(const user of result) {
-        let userStatus = checkUserStatus(user);
-        let hideUpdate=""
-        let manageUserStatusBtnName="deactivate";
-        let manageUserStatusBtnColor="warning"
-        if (userStatus === "Deactivated") {
-            hideUpdate = "visually-hidden";
-            manageUserStatusBtnName="activate";
-            manageUserStatusBtnColor="success"
-        }
+    for (const user of result) {
+        if (user.role === "Employee" || user.role === "Manager") {
+            let userStatus = checkUserStatus(user);
+            let hideUpdate=""
+            let manageUserStatusBtnName="deactivate";
+            let manageUserStatusBtnColor="warning"
+            if (userStatus === "Deactivated") {
+                hideUpdate = "visually-hidden";
+                manageUserStatusBtnName="activate";
+                manageUserStatusBtnColor="success"
+            }
 
-        let tableRow = "<tr>";
-        tableRow += '<td id="userName">' + user.username + "</td>";
-        tableRow += '<td id="displayName">' + user.displayName + "</td>";
-        tableRow += '<td id="userEmail">' + user.email + "</td>";
-        tableRow += '<td id="userRole">' + user.role + "</td>";
-        tableRow += "<td>" + userStatus + "</td>";
+            let tableRow = "<tr>";
+            tableRow += '<td id="userName">' + user.username + "</td>";
+            tableRow += '<td id="displayName">' + user.displayName + "</td>";
+            tableRow += '<td id="userEmail">' + user.email + "</td>";
+            tableRow += '<td id="userRole">' + user.role + "</td>";
+            tableRow += "<td>" + userStatus + "</td>";
 
-        if (currentUserRole === "Administrator"){
-            tableRow += '<td><a href="update_user.html?username=' + user.username + '"><button type="button" class="btn btn-outline-success btn-rounded ' + hideUpdate + '" data-mdb-ripple-color="light">Update</button></a> \
+            if (currentUserRole === "Administrator") {
+                tableRow += '<td><a href="update_user.html?username=' + user.username + '"><button type="button" class="btn btn-outline-success btn-rounded ' + hideUpdate + '" data-mdb-ripple-color="light">Update</button></a> \
 <button type="button" class="btn btn-outline-danger btn-rounded" data-mdb-ripple-color="light" data-mdb-toggle="modal" data-mdb-target="#deleteUserModal" onclick="changeUserDeleteModal(\'' + user.username + '\', \'' + user.role + '\')">Delete</button>\
 <button id="manageUserStatus" type="button" class="btn btn-outline-' + manageUserStatusBtnColor + ' btn-rounded" data-mdb-ripple-color="light" data-mdb-toggle="modal" data-mdb-target="#changeStatusModal" onclick="changeUserStatusModal(\'' + user.username + '\', \'' + user.role + '\', \'' + manageUserStatusBtnName + '\')">' + manageUserStatusBtnName + '</button></td>';
+            }
+
+            tableRow += "</tr>";
+            $("#usersListingTableContent").append(tableRow);
         }
-
-        tableRow += "</tr>";
-
-        $("#usersListingTableContent").append(tableRow);
     }
 }
 

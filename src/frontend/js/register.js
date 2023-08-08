@@ -1,4 +1,5 @@
-let roleChosen
+let roleChosen;
+let currentUserRole;
 
 $.ajax({
     type: 'GET',
@@ -7,6 +8,10 @@ $.ajax({
         withCredentials: true
     },
     crossDomain: true,
+    success: function(result) {
+        showLoggedUserInfo(result);
+        currentUserRole = result.role;
+    },
     error: function(xhr, status, code) {
         window.location.href = "../login.html";
     }
@@ -15,6 +20,15 @@ $.ajax({
 function onPageLoaded() {
     hideElement("#loadingContainer");
     showElement("#returnToAdminMenuContainer");
+
+    if (currentUserRole !== "Administrator") {
+        showElement("#errorMessageContainer");
+        $("#errorMessageContent").append("Authorization not enough");
+        hideElement("#returnToAdminMenuContainer");
+        hideElement("#registerBtn");
+        hideElement("#registerForm");
+        return;
+    }
 }
 
 function onRegisterPageError(xhr, status, code) {
@@ -37,12 +51,12 @@ function showRegisterError(xhr, status, code) {
         errorMessageContent.append(errorMessage.problem);
         errorFields.forEach((field) => {
             if (errorMessage[field] !== undefined) {
-                errorMessageContent.append("<br>" + errorMessage[field]);
+                errorMessageContent.append("<ul><li>" + errorMessage[field] + "</li></ul>");
             }
         });
 
         if ((confirmPassword == "" || confirmPassword == undefined)) {
-            errorMessageContent.append("<br> The confirm password field must not be empty");
+            errorMessageContent.append("<ul><li> The confirm password field must not be empty </li></ul>");
         }
 
         return;

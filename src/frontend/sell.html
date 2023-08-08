@@ -85,7 +85,17 @@
 
         <div id="errorMessageContainer" class="container my-5 visually-hidden">
             <div id="errorMessage" class="alert alert-danger" role="alert">
-                <i class="fas fa-times-circle me-3"></i><span id="errorMessageContent"></span>
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-times-circle me-3"></i>
+                        </div>
+                        
+                        <div class="col">
+                            <span id="errorMessageContent"></span>
+                        </div>    
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -95,9 +105,7 @@
             </div>
         </div>
 
-        <div id="returnToPartsListingContainer" class="container my-5 visually-hidden">
-            <a href="index.html"><button type="button" class="btn btn-primary btn-lg btn-block">Return to Parts Listing</button></a>
-            <hr class="my-4" />
+        <div id="returnToPartInfoContainer" class="container my-5 visually-hidden">
         </div>
  
         <div id="sellPartForm" class="container visually-hidden">
@@ -186,7 +194,7 @@
                     </div>
                     <div id="logoutModalBody" class="modal-body">Are you sure you want to logout from Carsitty part management system?</div>
                     <div class="modal-footer">
-                        <a href="../logout.html" class="btn btn-success"> 
+                        <a href="logout.html" class="btn btn-success"> 
                             Yes 
                         </a>
                         <button id="logoutModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">

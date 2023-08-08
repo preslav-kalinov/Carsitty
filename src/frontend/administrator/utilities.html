@@ -87,7 +87,17 @@
 
     <div id="errorMessageContainer" class="container my-5 visually-hidden">
         <div id="errorMessage" class="alert alert-danger" role="alert">
-            <i class="fas fa-times-circle me-3"></i><span id="errorMessageContent"></span>
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-times-circle me-3"></i>
+                    </div>
+                    
+                    <div class="col">
+                        <span id="errorMessageContent"></span>
+                    </div>    
+                </div>
+            </div>
         </div>
     </div>
 
@@ -107,9 +117,9 @@
     </div>
 
     <div class="container">
-      <div class="form-outline mb-4 mx-3 my-3" style="background-color: #3c3c3c;">
+      <div id="logSearchField" class="form-outline mb-4 mx-3 my-3" style="background-color: #3c3c3c;">
         <input oninput="logSearchInputChanged()" type="text" id="userSearch" class="form-control"/>
-        <label class="form-label" for="userSearch">Search (by Date or Message)</label>
+        <label class="form-label" for="userSearch">Search (by Date, Message or Regex Symbols)</label>
       </div>
     </div>
     
@@ -131,7 +141,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="createBackupModalLabel">Confirm user deletion</h5>
+            <h5 class="modal-title" id="createBackupModalLabel">Confirm backup creation</h5>
             <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
           </div>
           <div id="createBackupModalBody" class="modal-body"></div>

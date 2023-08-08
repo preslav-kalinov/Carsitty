@@ -7,7 +7,7 @@
         content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <title>Add Part | Carsitty</title>
+        <title>Edit Part | Carsitty</title>
         <!-- MDB icon -->
         <link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
         <!-- Font Awesome -->
@@ -34,15 +34,15 @@
         <script src="../js/config.js"></script>
         <!-- Util -->
         <script src="../js/util.js"></script>
-        <!-- Add Part -->
-        <script src="../js/addPart.js"></script>
+        <!-- Edit Part -->
+        <script src="../js/editPart.js"></script>
     </head>
     <body onload="onPageLoaded()">
-        <!-- Start your project here-->
         <main>
+            <!-- Start your project here-->
             <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 <div class="container-fluid d-flex justify-content-center">
-                    <div class="navbar-brand">Add Part</div>
+                    <div class="navbar-brand">Edit Part</div>
                 </div>
 
                 <div class="d-flex align-items-center">
@@ -101,19 +101,18 @@
 
             <div id="successMessageContainer" class="container my-5 visually-hidden">
                 <div class="alert alert-success" role="alert">
-                    <i class="fas fa-check-circle me-3"></i>Part added successfully</span>
+                    <i class="fas fa-check-circle me-3"></i>Part edited successfully</span>
                 </div>
             </div>
 
-            <div id="returnToPartsListingContainer" class="container my-5 visually-hidden">
-                <a href="../dashboard.html"><button type="button" class="btn btn-primary btn-lg btn-block">Return to Parts Listing</button></a>
-                <hr class="my-4" />
+            <div id="returnToPartInfoContainer" class="container my-5 visually-hidden">
             </div>
-            
-            <div id="addPartForm" class="container visually-hidden">
+    
+            <div id="editPartForm" class="container visually-hidden">
+
                 <div class="form-outline mb-4">
-                    <input type="text" id="partPicture" class="form-control" autocomplete="off"/>
-                    <label class="form-label" for="partPicture" style="margin-left: 0px">Part picture URL (can be empty if not needed)</label>
+                    <input type="number" id="partId" class="form-control active" autocomplete="off" disabled/>
+                    <label class="form-label" for="partId" style="margin-left: 0px">ID</label>
                     <div class="form-notch">
                         <div class="form-notch-leading" style="width: 9px"></div>
                         <div
@@ -125,7 +124,20 @@
                 </div>
 
                 <div class="form-outline mb-4">
-                    <input type="text" id="partName" class="form-control" autocomplete="off"/>
+                    <input type="text" id="partPicture" class="form-control active" autocomplete="off"/>
+                    <label class="form-label" for="partPicture" style="margin-left: 0px">Part picture URL</label>
+                    <div class="form-notch">
+                        <div class="form-notch-leading" style="width: 9px"></div>
+                        <div
+                        class="form-notch-middle"
+                        style="width: 88.8px"
+                        ></div>
+                        <div class="form-notch-trailing"></div>
+                    </div>
+                </div>
+
+                <div class="form-outline mb-4">
+                    <input type="text" id="partName" class="form-control active" autocomplete="off"/>
                     <label class="form-label" for="partName" style="margin-left: 0px">Part name</label>
                     <div class="form-notch">
                         <div class="form-notch-leading" style="width: 9px"></div>
@@ -138,7 +150,7 @@
                 </div>
 
                 <div class="form-outline mb-4">
-                    <input type="text" id="oemNumber" class="form-control" autocomplete="off"/>
+                    <input type="text" id="oemNumber" class="form-control active" autocomplete="off"/>
                     <label class="form-label" for="oemNumber" style="margin-left: 0px">OEM number</label>
                     <div class="form-notch">
                         <div class="form-notch-leading" style="width: 9px"></div>
@@ -151,7 +163,7 @@
                 </div>
 
                 <div class="form-outline mb-4">
-                    <input type="number" id="partQuantity" class="form-control" autocomplete="off"/>
+                    <input type="number" id="partQuantity" class="form-control active" autocomplete="off"/>
                     <label class="form-label" for="partQuantity" style="margin-left: 0px">Quantity</label>
                     <div class="form-notch">
                         <div class="form-notch-leading" style="width: 9px"></div>
@@ -164,7 +176,7 @@
                 </div>
 
                 <div class="form-outline mb-4">
-                    <input type="number" id="partPrice" class="form-control" autocomplete="off"/>
+                    <input type="number" id="partPrice" class="form-control active" autocomplete="off"/>
                     <label class="form-label" for="partPrice" style="margin-left: 0px">Price</label>
                     <div class="form-notch">
                         <div class="form-notch-leading" style="width: 9px"></div>
@@ -206,7 +218,7 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                <button id="formSubmitButton" onclick="submitPart()" type="button" class="btn btn-primary btn-block mb-4">Add part</button>
+                <button id="formSubmitButton" onclick="submitPart()" type="button" class="btn btn-primary btn-block mb-4">Edit part</button>
             </div>
 
             <!-- Logout Modal -->
@@ -239,8 +251,8 @@
             </div>
             <!-- Copyright -->
         </footer>
-
         <!-- End your project here-->
+
         <!-- MDB -->
         <script type="text/javascript" src="../js/mdb.min.js"></script>
         <!-- Custom scripts -->

@@ -87,9 +87,19 @@
 
     <div id="errorMessageContainer" class="container my-5 visually-hidden">
       <div id="errorMessage" class="alert alert-danger" role="alert">
-          <i class="fas fa-times-circle me-3"></i><span id="errorMessageContent"></span>
+          <div class="container">
+              <div class="row align-items-center">
+                  <div class="col-auto">
+                      <i class="fas fa-times-circle me-3"></i>
+                  </div>
+                  
+                  <div class="col">
+                      <span id="errorMessageContent"></span>
+                  </div>    
+              </div>
+          </div>
       </div>
-    </div>
+  </div>
 
     <div id="returnToManagerMenuContainer" class="container my-4 visually-hidden">
       <a href="manager/manager.html"><button type="button" class="btn btn-primary btn-lg btn-block">Return to Manager Portal</button></a>
@@ -113,37 +123,14 @@
           <tr>
             <th scope="col">ID</th>
             <th scope="col">Name</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Price</th>
+            <th scope="col">OEM Number</th>
             <th scope="col">Category</th>
-            <th scope="col">Car</th>
-            <th scope="col">Actions</th>
+            <th scope="col">Cars</th>
           </tr>
         </thead>
         <tbody id="partsListingTableContent">
         </tbody>
       </table>
-    </div>
-
-    <!-- Delete Modal -->
-    <div class="modal fade" id="deletePartModal" tabindex="-1" aria-labelledby="deletePartModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="deletePartModalLabel">Confirm part deletion</h5>
-            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div id="deletePartModalBody" class="modal-body"></div>
-          <div class="modal-footer">
-            <button id="deletePartModalYesButton" type="button" class="btn btn-success">
-              Yes
-            </button>
-            <button id="deletePartModalNoButton" type="button" class="btn btn-danger" data-mdb-dismiss="modal">
-              No
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Logout Modal -->

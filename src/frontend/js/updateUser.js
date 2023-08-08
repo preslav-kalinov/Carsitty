@@ -164,7 +164,7 @@ function showUpdateUserError(xhr, status, code) {
         errorMessageContent.append(errorMessage.problem);
         errorFields.forEach((field) => {
             if (errorMessage[field] !== undefined) {
-                errorMessageContent.append("<br>" + errorMessage[field]);
+                errorMessageContent.append("<ul><li>" + errorMessage[field] + "</li></ul>");
             }
         });
 
@@ -173,6 +173,11 @@ function showUpdateUserError(xhr, status, code) {
 
     if(xhr.status == 401 || xhr.status == 403) {
         errorMessageContent.append(errorMessage.problem);
+        hideElement("#loadingContainer");
+        hideElement("#returnToAdminMenuContainer");
+        hideElement("#updateBtn");
+        hideElement("#updateForm");
+
         return;
     }
 
