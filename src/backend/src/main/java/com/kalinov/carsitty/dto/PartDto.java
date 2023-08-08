@@ -12,6 +12,7 @@ public class PartDto {
     private BigDecimal price;
     private Long categoryId;
     private Set<Long> carIds;
+    private Long userId;
 
     public PartDto() {
     }
@@ -78,5 +79,13 @@ public class PartDto {
 
     public void setCarIds(Set<Long> carIds) {
         this.carIds = carIds;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

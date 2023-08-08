@@ -48,7 +48,7 @@ public class PartDiscountSharingService {
     }
 
     private String getPartDiscountPostText(Long partId, DiscountDto discountDto) throws IOException {
-        PartDto partDto = this.partService.getPartById(partId);
+        PartDto partDto = this.partService.getPart(partId);
         String partName = partDto.getName();
         BigDecimal partPrice = partDto.getPrice();
         BigDecimal partDiscount = BigDecimal.valueOf(discountDto.getPartDiscount());

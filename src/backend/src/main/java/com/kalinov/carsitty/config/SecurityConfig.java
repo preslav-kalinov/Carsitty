@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .authorizeRequests()
 
-                .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString())
+                .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString(), RoleEnum.Employee.toString())
                 .antMatchers(HttpMethod.GET, "/users/*").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString())
 
                 .antMatchers( "/users").hasAuthority(RoleEnum.Administrator.toString())
@@ -60,12 +60,12 @@ public class SecurityConfig {
 
                 .antMatchers(HttpMethod.GET, "/sales").hasAuthority(RoleEnum.Manager.toString())
 
+                .antMatchers(HttpMethod.GET, "/parts/logs").hasAuthority(RoleEnum.Administrator.toString())
+
                 .antMatchers(HttpMethod.GET, "/parts").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString(), RoleEnum.Employee.toString())
                 .antMatchers(HttpMethod.GET, "/parts/*").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString(), RoleEnum.Employee.toString())
                 .antMatchers(HttpMethod.GET, "/parts/categories").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString(), RoleEnum.Employee.toString())
                 .antMatchers(HttpMethod.GET, "/parts/cars").hasAnyAuthority(RoleEnum.Manager.toString(), RoleEnum.Administrator.toString(), RoleEnum.Employee.toString())
-
-                .antMatchers(HttpMethod.POST, "/parts/logs").hasAuthority(RoleEnum.Administrator.toString())
 
                 .antMatchers(HttpMethod.POST, "/parts/*/sale").hasAuthority(RoleEnum.Employee.toString())
                 .antMatchers(HttpMethod.POST, "/parts/*/share").hasAuthority(RoleEnum.Employee.toString())

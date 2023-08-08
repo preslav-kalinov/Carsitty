@@ -234,22 +234,9 @@ public class PartService {
             this.mailService.sendEmail(getManagersEmail(), mailSubject, emailBody);
         }
     }
-
-    public PartDto getPartById(Long partId) throws IOException {
-        this.validatePartId(partId);
-        Part part = this.partDao.findById(partId).get();
-        PartDto partDto = modelMapper.map(part, PartDto.class);
-
-        Set<Long> carIds = part.getCars().stream()
-                .map(Car::getId)
-                .collect(Collectors.toSet());
-        partDto.setCarIds(carIds);
-
-        return partDto;
-    }
-
+    
     public String getPartNameById(Long partId) throws IOException {
-        return this.getPartById(partId).getName();
+        return this.getPart(partId).getName();
     }
 
     private List getManagersEmail() {

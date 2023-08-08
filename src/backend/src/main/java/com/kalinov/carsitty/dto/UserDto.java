@@ -6,6 +6,8 @@ import com.kalinov.carsitty.RoleEnum;
 import javax.validation.constraints.*;
 
 public class UserDto {
+    private Long id;
+
     @NotBlank(message = "The username must not be empty")
     @Size(min = 3, max = 128, message = "The username length has to be between 3 and 128 characters")
     @Pattern(regexp = "^\\w+$", message = "The username can contain only numbers, letters or underscores")
@@ -15,7 +17,6 @@ public class UserDto {
     @Size(min = 3, max = 1024, message = "The display name length has to be between 3 and 1024 characters")
     private String displayName;
 
-    @JsonIgnore
     @NotBlank(message = "The password must not be empty")
     @Size(min = 6, max = 60, message = "The password length has to be between 6 and 60 characters")
     @Pattern(regexp = "^[^\\s]+$", message = "The password cannot contain whitespaces")
@@ -32,6 +33,14 @@ public class UserDto {
     private Boolean enabled;
 
     public UserDto() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
