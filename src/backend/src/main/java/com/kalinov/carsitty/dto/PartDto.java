@@ -10,6 +10,7 @@ public class PartDto {
     private String oem;
     private Long quantity;
     private BigDecimal price;
+    private Long discount;
     private Long categoryId;
     private Set<Long> carIds;
     private Long userId;
@@ -63,6 +64,14 @@ public class PartDto {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Long getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Long discount) {
+        this.discount = discount;
     }
 
     public Long getCategoryId() {

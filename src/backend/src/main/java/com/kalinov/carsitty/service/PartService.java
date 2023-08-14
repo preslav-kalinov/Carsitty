@@ -2,15 +2,17 @@ package com.kalinov.carsitty.service;
 
 import com.kalinov.carsitty.RoleEnum;
 import com.kalinov.carsitty.dao.*;
-import com.kalinov.carsitty.dto.NewPartDto;
-import com.kalinov.carsitty.dto.PartDto;
-import com.kalinov.carsitty.dto.NewSaleDto;
+import com.kalinov.carsitty.dto.*;
 import com.kalinov.carsitty.entity.*;
 import com.kalinov.carsitty.util.ModelMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.mail.MessagingException;
@@ -78,8 +80,13 @@ public class PartService {
     }
 
     //operation to add new part
-    public Part createPart(NewPartDto newPartDto, User user) throws IOException {
+    public Part createPart(NewPartDto newPartDto, User user) throws IOException, MethodArgumentNotValidException, NoSuchMethodException {
         this.validatePartData(newPartDto);
+
+        if (this.partDao.getPartCountByOem(newPartDto.getOem()) > 0) {
+            throwMethodArgumentNotValidExceptionForDuplicateOem(newPartDto);
+        }
+
         Category category = this.categoryDao.findById(newPartDto.getCategoryId()).get();
 
         List<Car> cars = newPartDto.getCarIds().stream()
@@ -92,6 +99,7 @@ public class PartService {
         part.setOem(newPartDto.getOem());
         part.setQuantity(newPartDto.getQuantity());
         part.setPrice(newPartDto.getPrice());
+        part.setDiscount(newPartDto.getDiscount());
         part.setCategory(category);
         part.setCars(new HashSet<>(cars));
         part.setUser(user);
@@ -104,7 +112,7 @@ public class PartService {
     }
 
     //operation to edit existing part
-    public void updatePart(Long partId, NewPartDto newPartDto, User user) throws IOException {
+    public void updatePart(Long partId, NewPartDto newPartDto, User user) throws IOException, MethodArgumentNotValidException, NoSuchMethodException {
         this.validatePartId(partId);
         this.validatePartData(newPartDto);
         Category category = categoryDao.findById(newPartDto.getCategoryId()).get();
@@ -119,6 +127,7 @@ public class PartService {
         part.setOem(newPartDto.getOem());
         part.setQuantity(newPartDto.getQuantity());
         part.setPrice(newPartDto.getPrice());
+        part.setDiscount(newPartDto.getDiscount());
         part.setCategory(category);
         part.setCars(new HashSet<>(cars));
 
@@ -136,8 +145,7 @@ public class PartService {
         this.partDao.deleteById(partId);
         this.logService.logDeletedPart(partId, partName);
 
-        Part part = partDao.findById(partId).get();
-        this.fileService.writeToFile("Part with ID:" + part.getId() + " and name '" + part.getName() +
+        this.fileService.writeToFile("Part with ID:" + partId + " and name '" + partName +
                 "' was successfully deleted by user '" + user.getUsername() + "'");
     }
 
@@ -153,7 +161,9 @@ public class PartService {
 
         Sale sale = modelMapper.map(newSaleDto, Sale.class);
         BigDecimal soldQuantity = BigDecimal.valueOf(newSaleDto.getSoldQuantity());
-        BigDecimal saleProfit = soldQuantity.multiply(part.getPrice());
+        BigDecimal partDiscount = BigDecimal.valueOf(part.getDiscount());
+        BigDecimal partPriceAfterDiscount = part.getPrice().subtract(partDiscount.multiply(part.getPrice()).divide(BigDecimal.valueOf(100)));
+        BigDecimal saleProfit = soldQuantity.multiply(partPriceAfterDiscount);
 
         sale.setPart(part);
         sale.setSaleProfit(saleProfit);
@@ -215,6 +225,23 @@ public class PartService {
         if (newSaleDto.getSoldQuantity() <= 0 || newSaleDto.getSoldQuantity() > partQuantity) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can sell between 1 and " + partQuantity + " of this product");
         }
+    }
+
+    private void throwMethodArgumentNotValidExceptionForDuplicateOem(NewPartDto newPartDto)
+            throws MethodArgumentNotValidException, NoSuchMethodException {
+        BeanPropertyBindingResult bindingResultWithErrors = new BeanPropertyBindingResult(newPartDto, "newPartDto");
+        FieldError fieldError = new FieldError(
+                "newPartDto",
+                "oem",
+                String.format("The OEM number '%s' is already in use, please use another one", newPartDto.getOem())
+        );
+        bindingResultWithErrors.addError(fieldError);
+        MethodParameter throwFieldErrorForClass = new MethodParameter(
+                this.getClass().getDeclaredMethod("throwMethodArgumentNotValidExceptionForDuplicateOem", NewPartDto.class),
+                0
+        );
+
+        throw new MethodArgumentNotValidException(throwFieldErrorForClass, bindingResultWithErrors);
     }
 
     private void checkPartAvailability(Part part) throws MessagingException {

@@ -24,6 +24,11 @@ public class NewPartDto {
     @Min(value = 0, message = "The part price must be a positive number")
     private BigDecimal price;
 
+    @NotNull(message = "The part discount cannot be empty, but can be 0")
+    @Min(value = 0, message = "The part discount must be a positive number")
+    @Max(value = 95, message = "The part discount cannot exceed 95 percent")
+    private Long discount;
+
     @NotNull(message = "The part category cannot be empty")
     private Long categoryId;
 
@@ -72,6 +77,14 @@ public class NewPartDto {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Long getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Long discount) {
+        this.discount = discount;
     }
 
     public Long getCategoryId() {

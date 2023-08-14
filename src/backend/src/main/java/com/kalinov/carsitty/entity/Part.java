@@ -31,6 +31,9 @@ public class Part implements Serializable {
     @Column(name = "price")
     private BigDecimal price;
 
+    @Column(name = "discount")
+    private Long discount;
+
     @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;
@@ -94,6 +97,14 @@ public class Part implements Serializable {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Long getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Long discount) {
+        this.discount = discount;
     }
 
     public Category getCategory() {

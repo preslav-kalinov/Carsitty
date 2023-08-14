@@ -42,6 +42,7 @@ CREATE TABLE `parts` (
   `oem` varchar(128) CHARACTER SET utf8 NOT NULL,
   `quantity` bigint(20) UNSIGNED NOT NULL,
   `price` decimal(10,2) UNSIGNED NOT NULL DEFAULT 0.00,
+  `discount` int(3) NOT NULL DEFAULT 0,
   `categoryId` bigint(20) NOT NULL,
   `userId` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -61,13 +62,13 @@ public class PartsController {
     }
 
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity<Part> createPart(@Valid @RequestBody NewPartDto newPartDto, Authentication authentication) throws IOException {
+    public ResponseEntity<Part> createPart(@Valid @RequestBody NewPartDto newPartDto, Authentication authentication) throws IOException, MethodArgumentNotValidException, NoSuchMethodException {
         User user = userDao.getUsersByUsername(authentication.getName()).get(0);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.partService.createPart(newPartDto, user));
     }
 
     @RequestMapping(value = "/{partId}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
-    public ResponseEntity editPart(@Valid @RequestBody NewPartDto newPartDto, @PathVariable Long partId, Authentication authentication) throws IOException {
+    public ResponseEntity editPart(@Valid @RequestBody NewPartDto newPartDto, @PathVariable Long partId, Authentication authentication) throws IOException, MethodArgumentNotValidException, NoSuchMethodException {
         User user = userDao.getUsersByUsername(authentication.getName()).get(0);
         this.partService.updatePart(partId, newPartDto, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
