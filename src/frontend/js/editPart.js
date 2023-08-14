@@ -2,6 +2,7 @@ let categories;
 let cars;
 let categoryChosen;
 let carChosen;
+let currentRole;
 
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
@@ -14,10 +15,11 @@ $.ajax({
     },
     crossDomain: true,
     success: function(result) {
-        showLoggedUserInfo(result)
+        currentRole = result.role;
+        showLoggedUserInfo(result);
     },
     error: function(xhr, status, code) {
-        window.location.href = "login.html";
+        window.location.href = "../login.html";
     }
 });
 
@@ -30,6 +32,7 @@ function onPageLoaded() {
         },
         crossDomain: true,
         success: function (result) {
+            configureReturnToPartInfoBtn();
             parseCategories(result);
             getCarsAvailable();
         },
@@ -39,9 +42,15 @@ function onPageLoaded() {
     });
 }
 
+function configureReturnToPartInfoBtn() {
+    let button = '<a href="../part.html?id=' + id + '"><button type="button" class="btn btn-primary btn-lg btn-block">Return to Part Info</button></a> \
+    <hr class="my-4" />';
+    $("#returnToPartInfoContainer").append(button);
+}
+
 function onEditPartPageLoadError(xhr, status, code) {
     hideElement("#loadingContainer");
-    showElement("#returnToPartsListingContainer");
+    showElement("#returnToPartInfoContainer");
     showEditPartError(xhr, status, code);
 }
 
@@ -53,19 +62,19 @@ function showEditPartError(xhr, status, code) {
 
     if (xhr.status === 404 || xhr.status === 400) {
         const errorMessage = JSON.parse(xhr.responseText).errorMessage;
-        const errorFields = ["name", "quantity", "price", "categoryId", "carId"];
+        const errorFields = ["name", "quantity", "price", "discount", "categoryId", "carIds", "oem"];
 
         errorMessageContent.append(errorMessage.problem);
         errorFields.forEach((field) => {
             if (errorMessage[field] !== undefined) {
-                errorMessageContent.append("<br>" + errorMessage[field]);
+                errorMessageContent.append("<ul><li>" + errorMessage[field] + "</li></ul>");
             }
         });
 
         return;
     }
 
-    if(xhr.status == 401 || xhr.status == 403) {
+    if (xhr.status == 401 || xhr.status == 403) {
         errorMessageContent.append(errorMessage.problem);
         return;
     }
@@ -102,7 +111,7 @@ function getOnePart() {
         success: function (result) {
             parsePart(result);
             hideElement("#loadingContainer");
-            showElement("#returnToPartsListingContainer");
+            showElement("#returnToPartInfoContainer");
             showElement("#editPartForm");
         },
         error: function(xhr, status, code) {
@@ -113,23 +122,34 @@ function getOnePart() {
 
 function parsePart(part) {
     $("#partId").val(part.id);
+    $("#partPicture").val(part.pictureUrl);
     $("#partName").val(part.name);
+    $("#oemNumber").val(part.oem);
     $("#partQuantity").val(part.quantity);
     $("#partPrice").val(part.price);
+    $("#partDiscount").val(part.discount);
+
     $('#categoryItems').find('a').each(function() {
-        if($(this).attr('categoryId') == part.categoryId) {
-            if(!$(this).hasClass("active")) {
+        if ($(this).attr('categoryId') == part.categoryId) {
+            if (!$(this).hasClass("active")) {
                 $(this).addClass("active");
             }
             categoryChosen = part.categoryId;
         }
     });
+
+    carChosen = part.carIds;
     $('#carItems').find('a').each(function() {
-        if($(this).attr('carId') == part.carId) {
-            if(!$(this).hasClass("active"))
+        const carItemId = parseInt($(this).attr('carId'));
+        if (carChosen.includes(carItemId)) {
+            if (!$(this).hasClass("active")) {
                 $(this).addClass("active");
+            }
+        } else {
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active");
+            }
         }
-        carChosen = part.carId;
     });
 }
 
@@ -143,28 +163,39 @@ function parseCategories(arr) {
 function parseCars(arr) {
     cars = arr;
     for(const car of cars){
-        $("#carItems").append('<a carId="' + car.id + '" class="dropdown-item" onclick="setCar(' + car.id + ')">' + car.carBrand.brand + ' ' + car.model + '</a>');
+        $("#carItems").append('<a carId="' + car.id + '" class="dropdown-item" onclick="setCar(' + car.id + '); event.stopPropagation();">' + car.carBrand.brand + ' ' + car.model + '</a>');
     }
 }
 
 function setCategory(id) {
     categoryChosen = id;
     $('#categoryItems').find('a').each(function() {
-        if($(this).attr('categoryId') == id && !$(this).hasClass("active")) {
+        if ($(this).attr('categoryId') == id && !$(this).hasClass("active")) {
             $(this).addClass("active");
-        } else if($(this).attr('categoryId') != id && $(this).hasClass("active")) {
+        } else if ($(this).attr('categoryId') != id && $(this).hasClass("active")) {
             $(this).removeClass("active");
         }
     });
 }
 
 function setCar(id) {
-    carChosen = id;
+    const carId = parseInt(id);
+    if (carChosen.includes(carId)) {
+        carChosen = carChosen.filter(car => car !== carId);
+    } else {
+        carChosen.push(carId);
+    }
+    
     $('#carItems').find('a').each(function() {
-        if($(this).attr('carId') == id && !$(this).hasClass("active")) {
-            $(this).addClass("active");
-        } else if($(this).attr('carId') != id && $(this).hasClass("active")) {
-            $(this).removeClass("active");
+        const carItemId = parseInt($(this).attr('carId'));
+        if (carChosen.includes(carItemId)) {
+            if (!$(this).hasClass("active")) {
+                $(this).addClass("active");
+            }
+        } else {
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active");
+            }
         }
     });
 }
@@ -172,9 +203,9 @@ function setCar(id) {
 function carSearchInputChanged() {
     const userInputRegex = new RegExp(quotemeta($("#carSearch").val()), "i");
     $('#carItems').find('a').each(function() {
-        if(!userInputRegex.test($(this).text()) && !$(this).hasClass("visually-hidden")) {
+        if (!userInputRegex.test($(this).text()) && !$(this).hasClass("visually-hidden")) {
             $(this).addClass("visually-hidden");
-        } else if(userInputRegex.test($(this).text()) && $(this).hasClass("visually-hidden")) {
+        } else if (userInputRegex.test($(this).text()) && $(this).hasClass("visually-hidden")) {
             $(this).removeClass("visually-hidden");
         }
     });
@@ -183,9 +214,9 @@ function carSearchInputChanged() {
 function categorySearchInputChanged() {
     const userInputRegex = new RegExp(quotemeta($("#categorySearch").val()), "i");
     $('#categoryItems').find('a').each(function() {
-        if(!userInputRegex.test($(this).text()) && !$(this).hasClass("visually-hidden")) {
+        if (!userInputRegex.test($(this).text()) && !$(this).hasClass("visually-hidden")) {
             $(this).addClass("visually-hidden");
-        } else if(userInputRegex.test($(this).text()) && $(this).hasClass("visually-hidden")) {
+        } else if (userInputRegex.test($(this).text()) && $(this).hasClass("visually-hidden")) {
             $(this).removeClass("visually-hidden");
         }
     });
@@ -195,11 +226,14 @@ function submitPart() {
     showElement("#formSubmitLoadingContainer");
     hideElement("#formSubmitButton");
     const dataToBeSent = {
+        pictureUrl: $("#partPicture").val(),
         name: $("#partName").val(),
+        oem: $("#oemNumber").val(),
         quantity: $("#partQuantity").val(),
         price: $("#partPrice").val(),
+        discount: $("#partDiscount").val(),
         categoryId: categoryChosen,
-        carId: carChosen
+        carIds: carChosen
     };
     $.ajax({
         type: 'PUT',

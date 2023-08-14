@@ -26,8 +26,9 @@ function onPageLoaded() {
         crossDomain: true,
         success: function (result) {
             parsePart(result);
+            configureReturnToPartInfoBtn();
             hideElement("#loadingContainer");
-            showElement("#returnToPartsListingContainer");
+            showElement("#returnToPartInfoContainer");
             showElement("#sellPartForm");
         },
         error: function(xhr, status, code) {
@@ -36,9 +37,15 @@ function onPageLoaded() {
     });
 }
 
+function configureReturnToPartInfoBtn() {
+    let button = '<a href="part.html?id=' + id + '"><button type="button" class="btn btn-primary btn-lg btn-block">Return to Part Info</button></a> \
+    <hr class="my-4" />';
+    $("#returnToPartInfoContainer").append(button);
+}
+
 function onSellPartPageLoadError(xhr, status, code) {
     hideElement("#loadingContainer");
-    showElement("#returnToPartsListingContainer");
+    showElement("#returnToPartInfoContainer");
     showSellPartError(xhr, status, code);
 }
 
@@ -55,7 +62,7 @@ function showSellPartError(xhr, status, code) {
         errorMessageContent.append(errorMessage.problem);
         errorFields.forEach((field) => {
             if (errorMessage[field] !== undefined) {
-                errorMessageContent.append("<br>" + errorMessage[field]);
+                errorMessageContent.append("<ul><li>" + errorMessage[field] + "</li></ul>");
             }
         });
 
@@ -75,6 +82,7 @@ function parsePart(part) {
     $("#partName").val(part.name);
     $("#partQuantity").val(part.quantity);
     $("#partPrice").val(part.price);
+    $("#partSoldQuantity").val(1);
 }
 
 function submitPart() {
@@ -109,5 +117,5 @@ function partSoldSuccessfully(part) {
     hideElement("#errorMessageContainer");
     showElement("#successMessageContainer");
     $("#partQuantity").val(part.quantity);
-    $("#partSoldQuantity").val("");
+    $("#partSoldQuantity").val(1);
 }

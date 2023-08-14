@@ -1,7 +1,7 @@
 let categories;
 let cars;
 let categoryChosen;
-let carChosen;
+let carChosen = [];
 let currentRole;
 
 $.ajax({
@@ -16,13 +16,14 @@ $.ajax({
         showLoggedUserInfo(result);
     },
     error: function(xhr, status, code) {
-        window.location.href = "login.html";
+        window.location.href = "../login.html";
     }
 });
 
 function onPageLoaded() {
-    if (currentRole === "Employee" || currentRole === "Administrator") {
+    if (currentRole !== "Manager") {
         hideElement("#returnToPartsListingContainer");
+        hideElement("#loadingContainer");
         hideElement("#addPartForm");
         showElement("#errorMessageContainer");
 
@@ -62,12 +63,12 @@ function showAddPartError(xhr, status, code) {
     hideElement("#successMessageContainer");
 
     if (xhr.status === 404 || xhr.status === 400) {
-        const errorFields = ["name", "quantity", "price", "categoryId", "carId"];
+        const errorFields = ["name", "quantity", "price", "discount", "categoryId", "carIds", "oem"];
 
         errorMessageContent.append(errorMessage.problem);
         errorFields.forEach((field) => {
             if (errorMessage[field] !== undefined) {
-                errorMessageContent.append("<br>" + errorMessage[field]);
+                errorMessageContent.append("<ul><li>" + errorMessage[field] + "</li></ul>");
             }
         });
 
@@ -112,7 +113,7 @@ function parseCategories(arr) {
 function parseCars(arr) {
     cars = arr;
     for(const car of cars){
-        $("#carItems").append('<a carId="' + car.id + '" class="dropdown-item" onclick="setCar(' + car.id + ')">' + car.carBrand.brand + ' ' + car.model + '</a>');
+        $("#carItems").append('<a carId="' + car.id + '" class="dropdown-item" onclick="setCar(' + car.id + '); event.stopPropagation();">' + car.carBrand.brand + ' ' + car.model + '</a>');
     }
 }
 
@@ -128,12 +129,28 @@ function setCategory(id) {
 }
 
 function setCar(id) {
-    carChosen = id;
+    const carId = parseInt(id);
+
+    if (!carChosen) {
+        carChosen = [];
+    }
+    
+    if (carChosen.includes(carId)) {
+        carChosen = carChosen.filter(car => car !== carId);
+    } else {
+        carChosen.push(carId);
+    }
+    
     $('#carItems').find('a').each(function() {
-        if($(this).attr('carId') == id && !$(this).hasClass("active")) {
-            $(this).addClass("active");
-        } else if($(this).attr('carId') != id && $(this).hasClass("active")) {
-            $(this).removeClass("active");
+        const carItemId = parseInt($(this).attr('carId'));
+        if (carChosen.includes(carItemId)) {
+            if (!$(this).hasClass("active")) {
+                $(this).addClass("active");
+            }
+        } else {
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active");
+            }
         }
     });
 }
@@ -163,13 +180,18 @@ function categorySearchInputChanged() {
 function submitPart() {
     showElement("#formSubmitLoadingContainer");
     hideElement("#formSubmitButton");
+
     const dataToBeSent = {
+        pictureUrl: $("#partPicture").val(),
         name: $("#partName").val(),
+        oem: $("#oemNumber").val(),
         quantity: $("#partQuantity").val(),
         price: $("#partPrice").val(),
+        discount: 0,
         categoryId: categoryChosen,
-        carId: carChosen
+        carIds: carChosen
     };
+
     $.ajax({
         type: 'POST',
         url: APICONFIG.host + '/parts',
@@ -216,7 +238,9 @@ function partAddedSuccessfully() {
             $(this).removeClass("visually-hidden");
         }
     });
+    $("#partPicture").val("");
     $("#partName").val("");
+    $("#oemNumber").val("");
     $("#partQuantity").val("");
     $("#partPrice").val("");
 }

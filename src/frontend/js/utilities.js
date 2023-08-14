@@ -38,8 +38,17 @@ function onPageLoaded() {
             hideElement("#loadingContainer");
             showElement("#errorMessageContainer");
             hideElement('#logsListingContainer');
+            hideElement("#createBackupContainer");
+            hideElement("#logSearchField")
+
+            if (xhr.status == 403) {
+                hideElement("#returnToAdminMenuContainer");
+
+                $("#errorMessageContent").append(JSON.parse(xhr.responseText).errorMessage.problem);
+                return;
+            }
             
-            if (xhr.status == 404 || xhr.status == 401 || xhr.status == 403) {
+            if (xhr.status == 404 || xhr.status == 401) {
                 $("#errorMessageContent").append(JSON.parse(xhr.responseText).errorMessage.problem);
                 return;
             }
@@ -50,17 +59,28 @@ function onPageLoaded() {
 }
 
 function logSearchInputChanged() {
-    const userInput = $("#userSearch").val().trim();
-    const userInputRegex = new RegExp("\\b" + quotemeta(userInput), "i");
-    $('#logsListingTableContent').find('tr').each(function() {
+    const userInput = $("#logSearch").val().trim();
+    let userInputRegex;
+
+    try {
+        userInputRegex = new RegExp(userInput, "i");
+    } catch (e) {
+        //empty regex to match nothing
+        userInputRegex = new RegExp("", "i");
+    }
+
+    const logsListingTableContent = $('#logsListingTableContent');
+
+    logsListingTableContent.find('tr').each(function() {
         const eventTimeColumnText = $(this).find('td#eventTime').text();
         const logMessageColumnText = $(this).find('td#logMessage').text();
-        const hasEventTimeMatch = userInputRegex.test(eventTimeColumnText);
-        const hasLogMessageMatch = userInputRegex.test(logMessageColumnText);
+        const combinedText = eventTimeColumnText + " " + logMessageColumnText;
 
-        if (!(hasEventTimeMatch || hasLogMessageMatch) && !$(this).hasClass("visually-hidden")) {
+        const hasMatch = userInputRegex.test(combinedText);
+
+        if (!hasMatch && !$(this).hasClass("visually-hidden")) {
             $(this).addClass("visually-hidden");
-        } else if ((hasEventTimeMatch || hasLogMessageMatch) && $(this).hasClass("visually-hidden")) {
+        } else if (hasMatch && $(this).hasClass("visually-hidden")) {
             $(this).removeClass("visually-hidden");
         }
     });
