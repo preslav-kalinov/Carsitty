@@ -70,16 +70,28 @@ function onPageLoaded() {
 
 function partSearchInputChanged() {
     const userInput = $("#partSearch").val().trim();
-    const userInputRegex = new RegExp("\\b" + quotemeta(userInput), "i");
-    $('#partsListingTableContent').find('tr').each(function() {
-        const nameColumnText = $(this).find('td#partName').text();
-        const carColumnText = $(this).find('td#carBrand').text();
-        const hasNameMatch = userInputRegex.test(nameColumnText);
-        const hasCarMatch = userInputRegex.test(carColumnText);
+    let userInputRegex;
 
-        if (!(hasNameMatch || hasCarMatch) && !$(this).hasClass("visually-hidden")) {
+    try {
+        userInputRegex = new RegExp(userInput, "i");
+    } catch (e) {
+        // Invalid regex - use an empty regex to match nothing
+        userInputRegex = new RegExp("", "i");
+    }
+
+    const partsListingTableContent = $('#partsListingTableContent');
+
+    partsListingTableContent.find('tr').each(function() {
+        const nameColumnText = $(this).find('td#partName').text();
+        const oemColumnText = $(this).find('td#partOem').text();
+        const categoryColumnText = $(this).find('td#partCategory').text();
+        const carColumnText = $(this).find('td#carBrand').text();
+        const combinedText = nameColumnText + " " + oemColumnText + " " + categoryColumnText + " " + carColumnText;
+        const hasMatch = userInputRegex.test(combinedText);
+
+        if (!hasMatch && !$(this).hasClass("visually-hidden")) {
             $(this).addClass("visually-hidden");
-        } else if ((hasNameMatch || hasCarMatch) && $(this).hasClass("visually-hidden")) {
+        } else if (hasMatch && $(this).hasClass("visually-hidden")) {
             $(this).removeClass("visually-hidden");
         }
     });
@@ -91,9 +103,10 @@ function showPartsListing(result) {
         let tableRow = '<tr onclick="location.href=\'part.html?id=' + part.id + '\'">';
         tableRow += "<td>" + part.id + "</td>";
         tableRow += '<td id="partName">' + part.name + "</td>";
-        tableRow += "<td>" + part.oem + "</td>";
-        tableRow += "<td>" + part.category.name + "</td>";
+        tableRow += '<td id="partOem">' + part.oem + "</td>";
+        tableRow += '<td id="partCategory">' + part.category.name + "</td>";
         tableRow += '<td id="carBrand">' + carsString + "</td>";
+        tableRow += '<td> <i class="fas fa-chevron-right"></i> </td>';
         tableRow += "</tr>";
         $("#partsListingTableContent").append(tableRow);
     }
