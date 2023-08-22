@@ -59,7 +59,7 @@ function onPageLoaded() {
 }
 
 function logSearchInputChanged() {
-    const userInput = $("#logSearch").val().trim();
+    const userInput = $("#userSearch").val().trim();
     let userInputRegex;
 
     try {

@@ -80,13 +80,13 @@ function showUsersListing(result) {
     for (const user of result) {
         if (user.role === "Employee" || user.role === "Manager") {
             let userStatus = checkUserStatus(user);
-            let hideUpdate=""
+            let hideUpdate="";
             let manageUserStatusBtnName="deactivate";
-            let manageUserStatusBtnColor="warning"
+            let manageUserStatusBtnColor="warning";
             if (userStatus === "Deactivated") {
                 hideUpdate = "visually-hidden";
                 manageUserStatusBtnName="activate";
-                manageUserStatusBtnColor="success"
+                manageUserStatusBtnColor="success";
             }
 
             let tableRow = "<tr>";
@@ -113,7 +113,6 @@ function checkUserStatus(user) {
     if (user.enabled === false) {
         userStatus = "Deactivated";
     }
-
     return userStatus;
 }
 

@@ -173,13 +173,17 @@ function parseUsers(arr, currentUserId) {
 }
 
 function parsePart(part) {
+    let finalPrice = part.price;
+    if (currentRole === "Employee") {
+        finalPrice = part.price - ((part.discount * part.price) / 100);
+    }
+
     $("#partNameField").val(part.name);
     $("#oemNumberField").val(part.oem);
     $("#quantityField").val(part.quantity);
-    $("#priceField").val(part.price);
+    $("#priceField").val(parseFloat(finalPrice).toFixed(2));
     $("#discountField").val(part.discount + "%");
     $("#categoryField").val(categoryName);
-
     let carsNameString = carArr.join(', ');
     $("#supportedCarsField").val(carsNameString);
     $("#byUserField").val(userName);
