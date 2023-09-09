@@ -29,7 +29,7 @@ function onPageLoaded() {
         success: function (result) {
             hideElement("#loadingContainer");
             hideElement("#errorMessageContainer");
-            parseSalesData(result);
+            getAllParts(result);
         },
         error: function(xhr, status, code) {
             hideElement("#loadingContainer");
@@ -51,7 +51,40 @@ function onPageLoaded() {
     });
 }
 
-function parseSalesData(sales) {
+function getAllParts(sales) {
+    $.ajax({
+        type: 'GET',
+        url: APICONFIG.host + '/parts',
+        xhrFields: {
+            withCredentials: true
+        },
+        crossDomain: true,
+        success: function (result) {
+            hideElement("#loadingContainer");
+            hideElement("#errorMessageContainer");
+            parseSalesData(sales, result);
+        },
+        error: function(xhr, status, code) {
+            hideElement("#loadingContainer");
+            showElement("#errorMessageContainer");
+
+            if (xhr.status == 403) {
+                hideElement("#returnToManagerMenuContainer");
+                $("#errorMessageContent").append(JSON.parse(xhr.responseText).errorMessage.problem);
+                return;
+            }
+            
+            if (xhr.status == 404 || xhr.status == 401) {
+                $("#errorMessageContent").append(JSON.parse(xhr.responseText).errorMessage.problem);
+                return;
+            }
+
+            $("#errorMessageContent").append("Cannot connect to server");
+        }
+    });
+}
+
+function parseSalesData(sales, parts) {
     const partSales = {}; 
     const partProfits = {}; 
     const partQuantities = {};
@@ -76,12 +109,6 @@ function parseSalesData(sales) {
             partProfits[partId] += sale.saleProfit;
         }
 
-        if (!partQuantities[partId]) {
-            partQuantities[partId] = sale.part.quantity;
-        } else {
-            partQuantities[partId] += sale.part.quantity;
-        }
-
         if (!partNames[partId]) {
             partNames[partId] = sale.part.name;
         }
@@ -96,6 +123,20 @@ function parseSalesData(sales) {
             if (!employeeNames[userId]) {
                 employeeNames[userId] = sale.user.displayName;
             }
+        }
+    }
+
+    for (part of parts) {
+        const partIds = part.id;
+
+        if (!partQuantities[partIds]) {
+            partQuantities[partIds] = part.quantity;
+        } else {
+            partQuantities[partIds] += part.quantity;
+        }
+
+        if (!partNames[partIds]) {
+            partNames[partIds] = part.name;
         }
     }
 

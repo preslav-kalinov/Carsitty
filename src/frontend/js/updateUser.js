@@ -117,7 +117,6 @@ function update(user) {
         console.log("The password is empty!")
     }
 
-
     dataToBeSent.role = roleChosen;
 
     $.ajax({
