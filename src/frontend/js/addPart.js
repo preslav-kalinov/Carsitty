@@ -21,16 +21,6 @@ $.ajax({
 });
 
 function onPageLoaded() {
-    if (currentRole !== "Manager") {
-        hideElement("#returnToPartsListingContainer");
-        hideElement("#loadingContainer");
-        hideElement("#addPartForm");
-        showElement("#errorMessageContainer");
-
-        $("#errorMessageContent").append("Authorization not enough");
-        return;
-    }
-
     $.ajax({
         type: 'GET',
         url: APICONFIG.host + '/parts/categories',

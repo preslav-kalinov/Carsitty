@@ -31,6 +31,19 @@ build/
 
 ### VS Code ###
 .vscode/
+**/css/mdb.*
+**/css/addons*
+**/css/bootstrap*
+**/css/style*
+**/css/modules*
+
+**/js/mdb.*
+**/js/addons*
+**/js/bootstrap*
+**/js/modules*
+**/js/jquery-*
+
+**/frontend/src/
 
 # Maven
 .mvn
