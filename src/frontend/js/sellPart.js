@@ -78,10 +78,13 @@ function showSellPartError(xhr, status, code) {
 }
 
 function parsePart(part) {
+    let finalPrice = part.price;
+    finalPrice = part.price - ((part.discount * part.price) / 100);
+
     $("#partId").val(part.id);
     $("#partName").val(part.name);
     $("#partQuantity").val(part.quantity);
-    $("#partPrice").val(part.price);
+    $("#partPrice").val(parseFloat(finalPrice).toFixed(2));
     $("#partSoldQuantity").val(1);
 }
 
