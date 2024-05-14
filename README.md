@@ -21,7 +21,7 @@ An open source auto parts management software.
 5. Rename the `application.properties.dist` file in the `src/backend/config` folder to `application.properties` and modify it as follows:
 - `COMPANY_NAME` - your company's name
 - `PART_LIMIT` - responsible for sending emails to the users with role `Manager` if the current part is below the configured limit
-- `LOG_FILES_PATH` - the path for the log file, the following pattern should be followed `/LOG_FILE_PAH/LOG_FILE_NAME.log`
+- `LOG_FILES_PATH` - the path for the log file, the following pattern should be followed `/LOG_FILE_PATH/LOG_FILE_NAME.log`
 - `DB_BACKUP_PATH` - the path where the database backup will be created
 - `MYSQL_BIN_PATH` - the path for the mysql executable (the `bin` directory have to be provided)
 - `MASTER_ADMIN_PASSWORD` - the master admin password that the Carsitty application will be using to connect to the Carsitty database (it is on a one-time-set principle)
